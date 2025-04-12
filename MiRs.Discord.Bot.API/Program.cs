@@ -1,8 +1,15 @@
 using System.Reflection;
 using Asp.Versioning;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MiRs.Discord.Bot.API.Controllers.Commands;
+using MiRs.Discord.Bot.Interactors;
+using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
+using NetCord.Hosting.Services;
+using NetCord.Hosting.Services.ApplicationCommands;
+using NetCord.Rest;
 
 namespace MiRs.Discord.Bot.API
 {
@@ -36,7 +43,7 @@ namespace MiRs.Discord.Bot.API
             builder.Services.AddApiVersioning(
                 options =>
                 {
-                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
                     options.AssumeDefaultVersionWhenUnspecified = true;
                     options.ReportApiVersions = true;
 
@@ -55,7 +62,10 @@ namespace MiRs.Discord.Bot.API
                                       | GatewayIntents.DirectMessageReactions
                                       | GatewayIntents.GuildMessageReactions;
                 })
-                .AddGatewayEventHandlers(typeof(Program).Assembly);
+                .AddGatewayEventHandlers(typeof(Program).Assembly)
+                .AddApplicationCommands();
+
+            builder.Services.AddMediatRContracts();
 
             var app = builder.Build();
 
@@ -71,6 +81,9 @@ namespace MiRs.Discord.Bot.API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // Add commands from modules
+            app .AddModules(typeof(Program).Assembly);
 
             app.UseGatewayEventHandlers();
 

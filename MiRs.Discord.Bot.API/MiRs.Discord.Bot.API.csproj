@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -14,11 +15,17 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
     <PackageReference Include="NetCord" Version="1.0.0-alpha.356" />
     <PackageReference Include="NetCord.Hosting" Version="1.0.0-alpha.356" />
+    <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-alpha.356" />
+    <PackageReference Include="NetCord.Services" Version="1.0.0-alpha.356" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MiRs.Discord.Bot.Domain\MiRs.Discord.Bot.Domain.csproj" />
+    <ProjectReference Include="..\MiRs.Discord.Bot.Interactors\MiRs.Discord.Bot.Interactors.csproj" />
+    <ProjectReference Include="..\MiRs.Discord.Bot.Mediator\MiRs.Discord.Bot.Mediator.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

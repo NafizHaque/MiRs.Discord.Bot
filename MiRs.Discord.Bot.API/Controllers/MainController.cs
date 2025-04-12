@@ -4,6 +4,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MiRs.API.Controllers;
+using MiRs.Discord.Bot.Domain.Exceptions;
 using NetCord;
 
 namespace MiRs.Discord.Bot.API.Controllers
@@ -28,13 +29,28 @@ namespace MiRs.Discord.Bot.API.Controllers
         }
 
         /// <summary>
-        /// Logs Discord user message.
+        /// Test
         /// </summary>
-        /// <response code="200">Returns a list of users in json format.</response>
+        /// <param name="username">Test.</param>
+        /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <remarks>This call return user.</remarks>
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<IActionResult> LogUserMessage()
+        public async Task<IActionResult> GetUserStats(string username)
         {
-            return Ok("Message event handled.");
+            try
+            {
+                return Ok("test");
+
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(ex.CustomErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
