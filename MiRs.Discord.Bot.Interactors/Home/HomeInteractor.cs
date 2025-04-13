@@ -13,7 +13,7 @@ namespace MiRs.Discord.Bot.Interactors.Home
     {
 
         /// <summary>
-        /// Handles the request to create a user.
+        /// Handles the request to create a Home.
         /// </summary>
         /// <param name="request">The request to create user.</param>
         /// <param name="result">User object that was created.</param>

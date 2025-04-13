@@ -1,9 +1,12 @@
+using System.Net;
 using System.Reflection;
 using Asp.Versioning;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MiRs.Discord.Bot.API.Controllers.Commands;
+using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Interactors;
+using MiRs.Discord.Bot.MiRsClient;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
@@ -60,10 +63,14 @@ namespace MiRs.Discord.Bot.API
                                       | GatewayIntents.DirectMessages
                                       | GatewayIntents.MessageContent
                                       | GatewayIntents.DirectMessageReactions
-                                      | GatewayIntents.GuildMessageReactions;
+                                      | GatewayIntents.GuildMessageReactions
+                                      | GatewayIntents.Guilds;
                 })
                 .AddGatewayEventHandlers(typeof(Program).Assembly)
                 .AddApplicationCommands();
+
+
+            builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
 
             builder.Services.AddMediatRContracts();
 

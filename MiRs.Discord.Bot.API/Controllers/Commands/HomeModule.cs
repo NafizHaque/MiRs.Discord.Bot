@@ -14,23 +14,25 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// Simple ping pong command
         /// </summary>
         [SubSlashCommand("home", "Overall status of team matrix!")]
-        public async Task<Embed> HomeMenu()
+        public async Task<string> HomeMenu()
         {
-            var v = await Context.User.GetDMChannelAsync();
-            await v.SendMessageAsync("test");
-            try
-            {
-                var response = await Mediator.Send(new HomeRequest { Context = Context });
+            //var v = await Context.User.GetDMChannelAsync();
+            //await v.SendMessageAsync("test");
+            //try
+            //{
+            //    var response = await Mediator.Send(new HomeRequest { Context = Context });
+            //    throw new NotImplementedException();
+            //}
+            //catch (BadRequestException ex)
+            //{
+            //    throw new NotImplementedException();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new NotImplementedException();
+            //}
 
-            }
-            catch (BadRequestException ex)
-            {
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                throw new NotImplementedException();
-            }
+            return "Not available!";
         }
 
         /// <summary>

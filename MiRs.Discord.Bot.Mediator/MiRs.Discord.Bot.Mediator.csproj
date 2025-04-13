@@ -14,4 +14,8 @@
     <PackageReference Include="NetCord.Services" Version="1.0.0-alpha.356" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MiRs.Discord.Bot.Domain\MiRs.Discord.Bot.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
