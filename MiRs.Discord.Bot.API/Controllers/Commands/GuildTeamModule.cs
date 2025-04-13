@@ -1,24 +1,32 @@
-﻿using MediatR;
+﻿using System.Text;
+using MediatR;
 using MiRs.Discord.Bot.Domain.Exceptions;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
 using MiRs.Discord.Bot.Mediator.Model.Home;
+using NetCord;
+using NetCord.Gateway;
+using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
-    public class AdminModule(ISender sender) : BaseModule(sender)
+    [SlashCommand("guild", "Commands For Guild Teams!")]
+    public class GuildTeamModule(ISender sender) : BaseModule(sender)
     {
         /// <summary>
         /// Get All Team in Guild
         /// </summary>
-        [SlashCommand("guildteams", "Return all teams created in the server!")]
-        public async Task<string> GetTeamsInGuild()
+        [SubSlashCommand("get", "Return all teams created in the server!")]
+        public async Task GetTeamsInGuild()
         {
             try
             {
-                var teams = await Mediator.Send(new GetTeamsInGuildRequest { GuildId = Context.Guild.Id });
+                var response = await Mediator.Send(new GetTeamsInGuildRequest { GuildId = Context.Guild.Id });
 
-                return $" First team found: {teams.GuildTeams.FirstOrDefault().TeamName}";
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Embeds = new List<EmbedProperties> { response.GuildTeamsEmbedMessage },
+                }));
 
             }
             catch (BadRequestException ex)
@@ -34,12 +42,13 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// <summary>
         /// Get All Team in Guild
         /// </summary>
-        [SlashCommand("createteam", "Return all teams created in the server!")]
-        public async Task<string> CreateTeamsInGuild()
+        [SubSlashCommand("create", "Create team in the server!")]
+        public async Task<string> CreateTeamsInGuild(
+            [SlashCommandParameter(Name = "teamname")] string teamname)
         {
             try
             {
-                await Mediator.Send(new CreateGuildTeamRequest { GuildId = Context.Guild.Id, Teamname = "test" });
+                await Mediator.Send(new CreateGuildTeamRequest { GuildId = Context.Guild.Id, Teamname = teamname });
 
                 return $"Created Team!";
 

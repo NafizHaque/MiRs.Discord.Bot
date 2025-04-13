@@ -1,19 +1,23 @@
-﻿using MiRs.Discord.Bot.Mediator.Model.Home;
-using MiRs.Discord.Bot.Mediator;
-using MiRs.Discord.Bot.Mediator.Model.Admin;
-using MiRs.Discord.Bot.Gateway.MiRsClient;
-using NetCord.Rest;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using MediatR;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Mappers;
+using MiRs.Discord.Bot.Gateway.MiRsClient;
+using MiRs.Discord.Bot.Mediator;
+using MiRs.Discord.Bot.Mediator.Model.Admin;
+using NetCord.Rest;
 
 namespace MiRs.Discord.Bot.Interactors.Admin
 {
-    public class GetTeamsInGuildInteractor : RequestHandler<GetTeamsInGuildRequest, GetTeamsInGuildResponse>
+    public class GetEventsInGuildInteractor : RequestHandler<GetEventsInGuildRequest, GetEventsInGuildResponse>
     {
         private readonly IMiRsAdminClient _mirsAdminClient;
 
-        public GetTeamsInGuildInteractor(IMiRsAdminClient mirsAdminClient)
+        public GetEventsInGuildInteractor(IMiRsAdminClient mirsAdminClient)
         {
             _mirsAdminClient = mirsAdminClient;
         }
@@ -26,9 +30,9 @@ namespace MiRs.Discord.Bot.Interactors.Admin
         /// <param name="result">User object that was created.</param>
         /// <param name="cancellationToken">The cancellation token for the request.</param>
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
-        protected override async Task<GetTeamsInGuildResponse> HandleRequest(GetTeamsInGuildRequest request, GetTeamsInGuildResponse result, CancellationToken cancellationToken)
+        protected override async Task<GetEventsInGuildResponse> HandleRequest(GetEventsInGuildRequest request, GetEventsInGuildResponse result, CancellationToken cancellationToken)
         {
-            var guildTeams = (await _mirsAdminClient.GetGuildTeams(request.GuildId)).OrderBy(ge => ge.Id);
+            var guildTeams = (await _mirsAdminClient.GetGuildEvents(request.GuildId)).OrderBy(gt => gt.Id);
 
             StringBuilder teamidsString = new StringBuilder();
             StringBuilder teamNamesString = new StringBuilder();

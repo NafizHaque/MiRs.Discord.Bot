@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 using MiRs.Discord.Bot.Domain.Entities;
-using NetCord;
-using NetCord.Rest;
 
 namespace MiRs.Discord.Bot.Mediator.Model.Admin
 {
-    public class GetTeamsInGuildResponse
+    public class GetEventsInGuildRequest : IRequest<GetEventsInGuildResponse>
     {
-        public EmbedProperties GuildTeamsEmbedMessage { get; set; }
+        public ulong GuildId { get; set; }
+
+        public string GuildName { get; set; }
     }
 }

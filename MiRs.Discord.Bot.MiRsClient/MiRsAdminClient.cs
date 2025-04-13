@@ -9,14 +9,16 @@ namespace MiRs.Discord.Bot.MiRsClient
     {
         public async Task<IEnumerable<GuildTeam>> GetGuildTeams(ulong guildId)
         {
-            return await "https://localhost:7176/v1/"
+            GuildTeamContainer response =  await "https://localhost:7176/v1/"
                 .WithHeader("Content-Type", "application/json")
                 .AppendPathSegment("AdminRH/guilds")
                 .SetQueryParams(new
                 {
                     guildId = guildId
                 })
-                .GetJsonAsync<List<GuildTeam>>();
+                .GetJsonAsync<GuildTeamContainer>();
+
+            return response.GuildTeams;
         }
 
         public async Task CreateGuildTeam(ulong guildId, string teamname)
@@ -29,6 +31,32 @@ namespace MiRs.Discord.Bot.MiRsClient
                     teamname = teamname
                 })
             .PostAsync();
+        }
+
+        public async Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId)
+        {
+            GuildEventContainer response = await "https://localhost:7176/v1/"
+                .WithHeader("Content-Type", "application/json")
+                .AppendPathSegment("AdminRH/events")
+                .SetQueryParams(new
+                {
+                    guildId = guildId
+                })
+                .GetJsonAsync<GuildEventContainer>();
+
+            return response.GuildEvents;
+        }
+
+        public async Task CreateGuildEvent(ulong guildId, string teamname)
+        {
+            await "https://localhost:7176/v1/"
+               .AppendPathSegment("AdminRH/guilds")
+               .SetQueryParams(new
+               {
+                   guildId = guildId,
+                   teamname = teamname
+               })
+           .PostAsync();
         }
     }
 }
