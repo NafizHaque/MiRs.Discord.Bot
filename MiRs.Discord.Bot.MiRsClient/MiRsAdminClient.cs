@@ -47,16 +47,11 @@ namespace MiRs.Discord.Bot.MiRsClient
             return response.GuildEvents;
         }
 
-        public async Task CreateGuildEvent(ulong guildId, string teamname)
+        public async Task CreateGuildEvent(GuildEvent guildEvent)
         {
             await "https://localhost:7176/v1/"
-               .AppendPathSegment("AdminRH/guilds")
-               .SetQueryParams(new
-               {
-                   guildId = guildId,
-                   teamname = teamname
-               })
-           .PostAsync();
+            .AppendPathSegment("AdminRH/events")
+            .PostJsonAsync(guildEvent);
         }
     }
 }

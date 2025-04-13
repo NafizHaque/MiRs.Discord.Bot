@@ -32,15 +32,15 @@ namespace MiRs.Discord.Bot.Interactors.Admin
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
         protected override async Task<GetEventsInGuildResponse> HandleRequest(GetEventsInGuildRequest request, GetEventsInGuildResponse result, CancellationToken cancellationToken)
         {
-            var guildTeams = (await _mirsAdminClient.GetGuildEvents(request.GuildId)).OrderBy(gt => gt.Id);
+            var guildEvents = (await _mirsAdminClient.GetGuildEvents(request.GuildId)).OrderBy(gt => gt.Id);
 
             StringBuilder teamidsString = new StringBuilder();
             StringBuilder teamNamesString = new StringBuilder();
 
-            foreach (GuildTeam guildTeam in guildTeams)
+            foreach (GuildEvent guildEvent in guildEvents)
             {
-                teamidsString.Append($"{guildTeam.Id}\n");
-                teamNamesString.Append($"{guildTeam.TeamName}\n");
+                teamidsString.Append($"{guildEvent.Id}\n");
+                teamNamesString.Append($"{guildEvent.Eventname}\n");
             }
 
             teamidsString.Bold();

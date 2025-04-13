@@ -14,5 +14,7 @@ namespace MiRs.Discord.Bot.Gateway.MiRsClient
         Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId);
 
         Task CreateGuildTeam(ulong guildId, string teamname);
+
+        Task CreateGuildEvent(GuildEvent guildEvent);
     }
 }
