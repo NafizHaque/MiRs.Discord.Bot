@@ -77,6 +77,7 @@ namespace MiRs.Discord.Bot.API
                                         .Get<List<ulong>>();
 
             builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
+            builder.Services.AddScoped<IMiRsUserClient, MiRsUserClient>();
 
             builder.Services.AddMediatRContracts();
 

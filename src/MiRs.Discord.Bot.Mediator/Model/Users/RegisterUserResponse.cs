@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiRs.Discord.Bot.Mediator.Model.Users
 {
-    internal class RegisterUserResponse
+    public class RegisterUserResponse
     {
     }
 }

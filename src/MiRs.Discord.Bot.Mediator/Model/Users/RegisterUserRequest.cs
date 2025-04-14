@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace MiRs.Discord.Bot.Mediator.Model.Users
 {
-    internal class RegisterUserRequest
+    public class RegisterUserRequest : IRequest<RegisterUserResponse>
     {
+        public ulong UserId { get; set; }
+
+        public string Username { get; set; } = string.Empty;
+
+        public string RunescapeUsername { get; set; } = string.Empty;
     }
 }
