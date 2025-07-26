@@ -4,6 +4,17 @@ using NetCord.Rest;
 using NetCord;
 using MiRs.Discord.Bot.Domain.Configurations;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
+using Flurl.Http;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using NetCord.Services;
+using Flurl;
+using NetCord.Gateway;
+using NetCord.Gateway.JsonModels;
+using NetCord.Services.ComponentInteractions;
+using System.Text;
+using MiRs.Discord.Bot.Domain.Mappers;
+using Microsoft.VisualBasic;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
@@ -53,9 +64,50 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// Simple ping pong command
         /// </summary>
         [SlashCommand("ping", "Ping!")]
-        public async Task<string> Pong()
+        public async Task Pong()
         {
-            return await Task.FromResult("Ping!");
+
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            await RespondAsync(InteractionCallback.DeferredMessage());
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("Doctor Mudkip....Online\n");
+
+            try
+            {
+                IFlurlResponse response = await "https://localhost:7176/v1/"
+                   .AppendPathSegment($"AdminRH/ping")
+                   .WithTimeout(TimeSpan.FromSeconds(10))
+                   .PostAsync();
+                sb.Append("MiRs Api....Online\n");
+
+            }
+            catch (Exception ex) {
+
+                sb.Append("MiRs Api....Failed\n");
+            }
+
+            sb.Append($"ConnectionTime: {stopwatch.Elapsed.Milliseconds}ms");
+
+            sb.Wrapper("```");
+
+            stopwatch.Stop();
+
+            InteractionMessageProperties message = new InteractionMessageProperties()
+            {
+                Content = sb.ToString(),
+            };
+
+            GatewayClientConfiguration x = new GatewayClientConfiguration()
+            {
+                Presence = new PresenceProperties(UserStatusType.Online)
+            };
+
+            await FollowupAsync(message);
         }
 
         /// <summary>
@@ -72,7 +124,6 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             {
                 return true;
             }
-
 
             return await Task.FromResult(false);
         }

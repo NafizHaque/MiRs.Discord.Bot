@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Flurl.Http;
+using MediatR;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Exceptions;
@@ -9,6 +10,7 @@ using NetCord.Services.ApplicationCommands;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
+
     public class UserModule(ISender sender, IOptions<AppSettings> appSettings) : BaseModule(sender, appSettings)
     {
         /// <summary>
@@ -28,6 +30,49 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 }));
 
             }
+            catch (FlurlHttpException ex)
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = (await ex.GetResponseStringAsync()).Trim('"')
+                }));
+            }
+            catch (Exception ex)
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = $"Exception raised: {ex.Message}"
+                }));
+            }
+        }
+
+
+        /// <summary>
+        /// Create Event in Guild
+        /// </summary>
+        [SubSlashCommand("jointeam", "Join a Team!")]
+        public async Task AddTeamToEventInGuild(
+            [SlashCommandParameter(Name = "eventId")] int eventId,
+            [SlashCommandParameter(Name = "teamname")] string teamname)
+        {
+            try
+            {
+
+                var response = await Mediator.Send(
+                    new JoinTeamRequest
+                    {
+                        UserId = Context.User.Id,
+                        EventId = eventId,
+                        Teamname = teamname,
+                        GuildId = Context.Guild.Id,
+
+                    });
+
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = "Successfully created event!"
+                }));
+            }
             catch (BadRequestException ex)
             {
                 await RespondAsync(InteractionCallback.Message(new()
@@ -43,36 +88,5 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 }));
             }
         }
-
-        ///// <summary>
-        ///// Register User To RuneHunter.
-        ///// </summary>
-        //[SlashCommand("jointeam", "Join a Team!")]
-        //public async Task JoinTeam([SlashCommandParameter(Name = "runescape name")] string teamname)
-        //{
-        //    try
-        //    {
-        //        var response = await Mediator.Send(new JoinTeamRequest { UserId = Context.User.Id, Teamname = teamname });
-
-        //        await RespondAsync(InteractionCallback.Message(new()
-        //        {
-        //            Content = $"Success Joined Team {teamname}!"
-        //        }));
-        //    }
-        //    catch (BadRequestException ex)
-        //    {
-        //        await RespondAsync(InteractionCallback.Message(new()
-        //        {
-        //            Content = ex.Message
-        //        }));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await RespondAsync(InteractionCallback.Message(new()
-        //        {
-        //            Content = $"Exception raised: {ex.Message}"
-        //        }));
-        //    }
-        //}
     }
 }

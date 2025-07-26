@@ -51,8 +51,8 @@ namespace MiRs.Discord.Bot.Interactors.Admin
             teamNamesString.Bold();
 
             EmbedProperties embedProperties = new EmbedProperties()
-                .WithTitle("**Guild Teams **")
-                .WithDescription("The list of all teams with your server guild. ")
+                .WithTitle("**Guild Events**")
+                .WithDescription("The list of all events with your server guild. ")
                 .WithTimestamp(DateTimeOffset.UtcNow)
                 .WithColor(new(0x1eaae1))
                 .WithAuthor(new EmbedAuthorProperties()
@@ -63,7 +63,7 @@ namespace MiRs.Discord.Bot.Interactors.Admin
                         .WithValue(teamidsString.ToString())
                         .WithInline(),
                     new EmbedFieldProperties()
-                        .WithName("Team names")
+                        .WithName("Event names")
                         .WithValue(teamNamesString.ToString())
                         .WithInline()
                 );

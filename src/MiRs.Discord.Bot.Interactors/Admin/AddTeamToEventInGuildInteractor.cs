@@ -9,17 +9,16 @@ using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
 using MiRs.Discord.Bot.Mediator;
-using MiRs.Discord.Bot.Mediator.Model.Users;
 
-namespace MiRs.Discord.Bot.Interactors.User
+namespace MiRs.Discord.Bot.Interactors.Admin
 {
-    internal class JoinTeamInteractor : RequestHandler<JoinTeamRequest, JoinTeamResponse>
+    internal class AddTeamToEventInGuildInteractor : RequestHandler<AddTeamToEventInGuildRequest, AddTeamToEventInGuildResponse>
     {
-        private readonly IMiRsUserClient _mirsUserClient;
+        private readonly IMiRsAdminClient _mirsAdminClient;
         private readonly AppSettings _appSettings;
-        public JoinTeamInteractor(IMiRsUserClient mirsUserClient, IOptions<AppSettings> appSettings)
+        public AddTeamToEventInGuildInteractor(IMiRsAdminClient mirsAdminClient, IOptions<AppSettings> appSettings)
         {
-            _mirsUserClient = mirsUserClient;
+            _mirsAdminClient = mirsAdminClient;
             _appSettings = appSettings.Value;
         }
 
@@ -31,9 +30,8 @@ namespace MiRs.Discord.Bot.Interactors.User
         /// <param name="result">User object that was created.</param>
         /// <param name="cancellationToken">The cancellation token for the request.</param>
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
-        protected override async Task<JoinTeamResponse> HandleRequest(JoinTeamRequest request, JoinTeamResponse result, CancellationToken cancellationToken)
+        protected override async Task<AddTeamToEventInGuildResponse> HandleRequest(AddTeamToEventInGuildRequest request, AddTeamToEventInGuildResponse result, CancellationToken cancellationToken)
         {
-            await _mirsUserClient.JoinTeam(request.UserId, request.GuildId, request.Teamname);
 
             return result;
         }

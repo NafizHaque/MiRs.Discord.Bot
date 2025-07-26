@@ -12,13 +12,13 @@ using NetCord.Services.ApplicationCommands;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
-    [SlashCommand("guild", "Commands For Guild Teams!")]
+    [SlashCommand("team", "Commands For Guild Teams!")]
     public class GuildTeamModule(ISender sender, IOptions<AppSettings> appSettings) : BaseModule(sender, appSettings)
     {
         /// <summary>
         /// Get All Team in Guild
         /// </summary>
-        [SubSlashCommand("get", "Return all teams created in the server!")]
+        [SubSlashCommand("display", "Return all teams created in the server!")]
         public async Task GetTeamsInGuild()
         {
             try
@@ -38,6 +38,8 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 {
                     Embeds = new List<EmbedProperties> { response.GuildTeamsEmbedMessage },
                 }));
+
+                
 
             }
             catch (BadRequestException ex)

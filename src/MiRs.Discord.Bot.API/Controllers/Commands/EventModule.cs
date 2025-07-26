@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Exceptions;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
+using MiRs.Discord.Bot.Mediator.Model.Users;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
 
@@ -18,8 +19,8 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// <summary>
         /// Get All Team in Guild
         /// </summary>
-        [SubSlashCommand("get", "Return last 5 RH events in the server!")]
-        public async Task GetTeamsInGuild()
+        [SubSlashCommand("display", "Return last 5 RH events in the server!")]
+        public async Task GetEventsInGuild()
         {
             try
             {
@@ -36,7 +37,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
                 await RespondAsync(InteractionCallback.Message(new()
                 {
-                    Content = ex.Message
+                    Content = ex.CustomErrorMessage
                 }));
             }
             catch (Exception ex)
@@ -72,9 +73,9 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 );
 
                 var response = await Mediator.Send(
-                    new CreateEventInGuildRequest 
-                    { 
-                        GuildId = Context.Guild.Id, 
+                    new CreateEventInGuildRequest
+                    {
+                        GuildId = Context.Guild.Id,
                         Eventname = eventname,
                         EventStart = startDate,
                         EventEnd = endDate

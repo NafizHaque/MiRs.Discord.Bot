@@ -8,6 +8,8 @@ using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Mappers;
 using MiRs.Discord.Bot.Domain.Configurations;
 using Microsoft.Extensions.Options;
+using NetCord.Gateway;
+using NetCord;
 
 namespace MiRs.Discord.Bot.Interactors.Admin
 {
@@ -63,6 +65,12 @@ namespace MiRs.Discord.Bot.Interactors.Admin
                         .WithValue(teamNamesString.ToString())
                         .WithInline()
                 );
+
+            PresenceProperties presenceProperties = new PresenceProperties(UserStatusType.Online)
+                .AddActivities(new UserActivityProperties("Free Hosting!", UserActivityType.Watching))
+                .WithSince(DateTimeOffset.Now);
+                
+                
 
             result.GuildTeamsEmbedMessage = embedProperties;
 

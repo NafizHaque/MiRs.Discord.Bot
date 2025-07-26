@@ -6,6 +6,6 @@ namespace MiRs.Discord.Bot.Gateway.MiRsClient
     {
         Task RegisterUser(RHUser user);
 
-        Task JoinTeam(ulong userId, string teamname);
+        Task JoinTeam(ulong userid, ulong guildid, string teamname);
     }
 }

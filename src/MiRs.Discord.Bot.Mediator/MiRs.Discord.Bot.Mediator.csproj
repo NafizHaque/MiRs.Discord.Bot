@@ -18,4 +18,8 @@
     <ProjectReference Include="..\MiRs.Discord.Bot.Domain\MiRs.Discord.Bot.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\Runehunter\" />
+  </ItemGroup>
+
 </Project>

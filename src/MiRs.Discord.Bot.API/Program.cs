@@ -57,7 +57,6 @@ namespace MiRs.Discord.Bot.API
                     options.SubstituteApiVersionInUrl = true;
                 });
 
-
             builder.Services
                 .AddDiscordGateway(options =>
                 {
@@ -67,6 +66,12 @@ namespace MiRs.Discord.Bot.API
                                       | GatewayIntents.DirectMessageReactions
                                       | GatewayIntents.GuildMessageReactions
                                       | GatewayIntents.Guilds;
+
+                    options.Presence = new PresenceProperties(UserStatusType.Online)
+                    .WithActivities(new List<UserActivityProperties> { new UserActivityProperties("7 teams!", UserActivityType.Competing)
+                        .WithCreatedAt(DateTimeOffset.Now)
+                        .WithFlags(UserActivityFlags.Spectate)})
+                    .WithSince(DateTimeOffset.UtcNow.AddHours(-3));
                 })
                 .AddGatewayEventHandlers(typeof(Program).Assembly)
                 .AddApplicationCommands();
