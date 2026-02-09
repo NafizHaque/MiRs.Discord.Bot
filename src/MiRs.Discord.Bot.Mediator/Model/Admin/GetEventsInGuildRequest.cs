@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using MiRs.Discord.Bot.Domain.Entities;
+﻿using MediatR;
 
 namespace MiRs.Discord.Bot.Mediator.Model.Admin
 {
@@ -12,6 +6,6 @@ namespace MiRs.Discord.Bot.Mediator.Model.Admin
     {
         public ulong GuildId { get; set; }
 
-        public string GuildName { get; set; }
+        public string GuildName { get; set; } = string.Empty;
     }
 }

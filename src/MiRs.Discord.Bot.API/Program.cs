@@ -1,11 +1,5 @@
-using System.Net;
 using System.Reflection;
-using System.Runtime;
-using Asp.Versioning;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using MiRs.Discord.Bot.API.Controllers.Commands;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Interactors;
@@ -102,7 +96,7 @@ namespace MiRs.Discord.Bot.API
             app.MapControllers();
 
             // Add commands from modules
-            app .AddModules(typeof(Program).Assembly);
+            app.AddModules(typeof(Program).Assembly);
 
             app.UseGatewayEventHandlers();
 
