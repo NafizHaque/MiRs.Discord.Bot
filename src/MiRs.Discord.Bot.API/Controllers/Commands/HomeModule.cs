@@ -1,7 +1,11 @@
 ﻿using MediatR;
-using NetCord.Services.ApplicationCommands;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
+using MiRs.Discord.Bot.Domain.Exceptions;
+using MiRs.Discord.Bot.Mediator.Model.Runehunter;
+using NetCord;
+using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
@@ -9,37 +13,40 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
     public class HomeModule(ISender sender, IOptions<AppSettings> appSettings) : BaseModule(sender, appSettings)
     {
         /// <summary>
-        /// Simple ping pong command
+        /// Get all current user events progress
         /// </summary>
-        [SubSlashCommand("home", "Overall status of team matrix!")]
-        public async Task<string> HomeMenu()
+        [SubSlashCommand("progress", "Return the current user events progress")]
+        public async Task GetEventsProgress()
         {
-            //var v = await Context.User.GetDMChannelAsync();
-            //await v.SendMessageAsync("test");
-            //try
-            //{
-            //    var response = await Mediator.Send(new HomeRequest { Context = Context });
-            //    throw new NotImplementedException();
-            //}
-            //catch (BadRequestException ex)
-            //{
-            //    throw new NotImplementedException();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new NotImplementedException();
-            //}
+            try
+            {
+                GetEventsProgressResponse response = await Mediator.Send(new GetEventsProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
 
-            return "Not available!";
-        }
+                EmbedProperties embedProperties = new EmbedProperties()
+               .WithColor(new(0x1eaae1));
 
-        /// <summary>
-        /// Simple ping pong command
-        /// </summary>
-        [SubSlashCommand("armoury", "Overall status of team matrix!")]
-        public string ArmouryMenu()
-        {
-            return $"This is the hub armoury menu!";
+                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
+                {
+                    Components = response.EventProgressComponents,
+                    Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                }));
+
+            }
+            catch (BadRequestException ex)
+            {
+
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = ex.CustomErrorMessage
+                }));
+            }
+            catch (Exception ex)
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = $"Exception raised: {ex.Message}"
+                }));
+            }
         }
     }
 }

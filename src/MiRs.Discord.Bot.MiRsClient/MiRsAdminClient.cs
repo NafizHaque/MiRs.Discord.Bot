@@ -19,7 +19,7 @@ namespace MiRs.Discord.Bot.MiRsClient
                 .GetJsonAsync<GuildTeamContainer>();
 
             return response.GuildTeams;
-        }=
+        }
 
         public async Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId)
         {
