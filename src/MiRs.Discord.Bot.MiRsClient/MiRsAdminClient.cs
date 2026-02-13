@@ -34,5 +34,19 @@ namespace MiRs.Discord.Bot.MiRsClient
 
             return response.GuildEvents;
         }
+
+        public async Task<GuildPermissions> GetGuildMessagePermissions(ulong guildId)
+        {
+            GuildPermissions response = await "https://localhost:7176/v1/"
+                .WithHeader("Content-Type", "application/json")
+                .AppendPathSegment("Gen/guildperms")
+                .SetQueryParams(new
+                {
+                    guildId = guildId
+                })
+                .GetJsonAsync<GuildPermissions>();
+
+            return response;
+        }
     }
 }

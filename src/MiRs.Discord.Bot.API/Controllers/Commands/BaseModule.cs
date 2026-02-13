@@ -75,7 +75,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             try
             {
                 IFlurlResponse response = await "https://localhost:7176/v1/"
-                   .AppendPathSegment($"AdminRH/ping")
+                   .AppendPathSegment($"gen/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();
                 sb.Append("MiRs Api....Online\n");
@@ -100,7 +100,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
             GatewayClientConfiguration x = new GatewayClientConfiguration()
             {
-                Presence = new PresenceProperties(UserStatusType.Online)
+                Presence = new PresenceProperties(UserStatusType.DoNotDisturb)
             };
 
             await FollowupAsync(message);

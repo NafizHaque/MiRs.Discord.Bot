@@ -48,5 +48,42 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 }));
             }
         }
+
+        /// <summary>
+        /// Get latest Team Loot 
+        /// </summary>
+        [SubSlashCommand("drops", "Return the latest team drops")]
+        public async Task GetLatestTeamLoot()
+        {
+            try
+            {
+                GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ResponseId = Context.Interaction.ApplicationId, ResponseToken = Context.Interaction.Token });
+
+                EmbedProperties embedProperties = new EmbedProperties()
+               .WithColor(new(0x1eaae1));
+
+                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
+                {
+                    Components = response.LatestLootComponents,
+                    Flags = MessageFlags.IsComponentsV2,
+                }));
+
+            }
+            catch (BadRequestException ex)
+            {
+
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = ex.CustomErrorMessage
+                }));
+            }
+            catch (Exception ex)
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = $"Exception raised: {ex.Message}"
+                }));
+            }
+        }
     }
 }
