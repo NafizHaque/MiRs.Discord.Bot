@@ -6,6 +6,7 @@ using MiRs.Discord.Bot.Mediator;
 using MiRs.Discord.Bot.Mediator.Model.Runehunter;
 using NetCord;
 using NetCord.Rest;
+using System.Globalization;
 using System.Text;
 
 namespace MiRs.Discord.Bot.Interactors.Runehunter
@@ -49,10 +50,27 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
             foreach (RHUserLoot loot in teamLoot.TeamLoot)
             {
                 string username = char.ToUpper(loot.Username[0]) + loot.Username.Substring(1).ToLower();
-                content.AppendLine($"[{loot.DateLogged.ToString("HH:mm")}] {username} - ({loot.Quantity}) {loot.Loot} from {loot.Mobname}");
-            }
+                string lootName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(loot.Loot.ToLower());
+                string quantity = loot.Quantity == 1 ? string.Empty : $" ({loot.Quantity}) ";
 
-            content.AppendLine("```");
+                string lootMessage = $"[{loot.DateLogged.ToString("HH:mm")}] {username} - {lootName}{quantity}from {loot.Mobname}";
+
+                if (lootMessage.Length < 53)
+                {
+                    content.Append($"{lootMessage}\n");
+                }
+                else
+                {
+                    content.Append($"[{loot.DateLogged.ToString("HH:mm")}] {username} - {lootName}{quantity}\n");
+
+                    int padLeft = $"[{loot.DateLogged.ToString("HH:mm")}] {username}- ".Length;
+
+                    string secondLine = $"from {loot.Mobname}";
+
+                    content.Append($"{secondLine.PadLeft(padLeft)}");
+                }
+                content.Append("```");
+            }
 
             containerBuilder.AddComponents(
             new ComponentSectionProperties(new ComponentSectionThumbnailProperties(new ComponentMediaProperties(smallImage[0])))

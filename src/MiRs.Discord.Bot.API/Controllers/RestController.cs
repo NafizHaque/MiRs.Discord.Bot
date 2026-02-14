@@ -98,8 +98,6 @@ namespace MiRs.Discord.Bot.API.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
-
-
         }
     }
 }
