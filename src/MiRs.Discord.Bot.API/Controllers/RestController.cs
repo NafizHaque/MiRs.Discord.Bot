@@ -4,6 +4,7 @@ using MiRs.API.Controllers;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Exceptions;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
+using MiRs.Discord.Bot.Mediator.Model.Runehunter;
 using NetCord;
 using NetCord.Rest;
 using System.Net;
@@ -34,7 +35,7 @@ namespace MiRs.Discord.Bot.API.Controllers
         }
 
         /// <summary>
-        /// Test
+        /// Send Event Winners Message
         /// </summary>
         /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
         /// <remarks>This call return user.</remarks>
@@ -50,8 +51,6 @@ namespace MiRs.Discord.Bot.API.Controllers
                 };
 
                 RestMessage message = await _restclient.SendMessageAsync(eventWinner.Perms.ChannelId, messageProp);
-
-                _restclient.ModifyInteractionResponseAsync()
                 return Ok();
 
             }
@@ -63,6 +62,44 @@ namespace MiRs.Discord.Bot.API.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Test
+        /// </summary>
+        /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <remarks>This call return user.</remarks>
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [HttpPost("lootupdate")]
+        public async Task<IActionResult> UpdateTeamLootInteraction(GetLatestTeamLootRequest teamLootPerms)
+        {
+
+            try
+            {
+
+                GetLatestTeamLootResponse response = await Mediator.Send(teamLootPerms);
+
+                EmbedProperties embedProperties = new EmbedProperties()
+               .WithColor(new(0x1eaae1));
+
+                RestMessage message = await _restclient.ModifyInteractionResponseAsync(teamLootPerms.ResponseId.Value,
+                    teamLootPerms.ResponseToken,
+                     message => message.Components = response.LatestLootComponents
+                    );
+
+                return Ok();
+
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(ex.CustomErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+
         }
     }
 }

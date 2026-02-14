@@ -57,6 +57,16 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         {
             try
             {
+                if (!(await UserValidated()))
+                {
+                    await RespondAsync(InteractionCallback.Message(new()
+                    {
+                        Content = $"Lack Permissions!"
+                    }));
+
+                    return;
+                }
+
                 GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ResponseId = Context.Interaction.ApplicationId, ResponseToken = Context.Interaction.Token });
 
                 EmbedProperties embedProperties = new EmbedProperties()
