@@ -21,7 +21,7 @@ namespace MiRs.Discord.Bot.MiRsClient
             return response.EventTeamProgresses;
         }
 
-        public async Task<RHUserLootContainer> GetLatestTeamLoot(ulong userId, ulong guildId, ulong? responseId, string? token)
+        public async Task<RHUserLootContainer> GetLatestTeamLoot(ulong userId, ulong guildId, ulong? channelId, ulong? messageId)
         {
             RHUserLootContainer response = await "https://localhost:7176/v1/"
                 .WithHeader("Content-Type", "application/json")
@@ -30,8 +30,8 @@ namespace MiRs.Discord.Bot.MiRsClient
                 {
                     userId = userId,
                     guildId = guildId,
-                    responseId = responseId,
-                    token = token
+                    channelId = channelId,
+                    messageId = messageId
 
                 })
                 .GetJsonAsync<RHUserLootContainer>();

@@ -31,7 +31,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
         protected override async Task<GetLatestTeamLootResponse> HandleRequest(GetLatestTeamLootRequest request, GetLatestTeamLootResponse result, CancellationToken cancellationToken)
         {
-            RHUserLootContainer teamLoot = (await _mirsGameClient.GetLatestTeamLoot(request.UserId, request.GuildId, request.ResponseId, request.ResponseToken));
+            RHUserLootContainer teamLoot = (await _mirsGameClient.GetLatestTeamLoot(request.UserId, request.GuildId, request.ChannelId, request.MessageId));
 
             ComponentContainerProperties containerBuilder = new ComponentContainerProperties { AccentColor = new Color(0, 159, 225) }.AddComponents(new MediaGalleryProperties().AddItems(new MediaGalleryItemProperties(new ComponentMediaProperties("https://files.catbox.moe/m0tkim.png"))));
 
@@ -51,27 +51,19 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
             {
                 string username = char.ToUpper(loot.Username[0]) + loot.Username.Substring(1).ToLower();
                 string lootName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(loot.Loot.ToLower());
-                string quantity = loot.Quantity == 1 ? string.Empty : $" ({loot.Quantity}) ";
+                string quantity = loot.Quantity == 1 ? " " : $" ({loot.Quantity}) ";
 
-                string lootMessage = $"[{loot.DateLogged.ToString("HH:mm")}] {username} - {lootName}{quantity}from {loot.Mobname}";
+                content.Append($"[{loot.DateLogged.ToString("HH:mm")}] {username} got{quantity}{lootName}\n");
 
-                if (lootMessage.Length < 53)
-                {
-                    content.Append($"{lootMessage}\n");
-                }
-                else
-                {
-                    content.Append($"[{loot.DateLogged.ToString("HH:mm")}] {username} - {lootName}{quantity}\n");
+                string secondLine = $"from {loot.Mobname.ToLower()}";
 
-                    int padLeft = $"[{loot.DateLogged.ToString("HH:mm")}] {username}- ".Length;
+                content.Append($"{secondLine}\n");
 
-                    string secondLine = $"from {loot.Mobname}";
+                content.Append($"\n");
 
-                    content.Append($"{secondLine.PadLeft(padLeft)}");
-                }
-                content.Append("```");
             }
 
+            content.Append("```");
             containerBuilder.AddComponents(
             new ComponentSectionProperties(new ComponentSectionThumbnailProperties(new ComponentMediaProperties(smallImage[0])))
             .AddComponents(new TextDisplayProperties(content.ToString())));

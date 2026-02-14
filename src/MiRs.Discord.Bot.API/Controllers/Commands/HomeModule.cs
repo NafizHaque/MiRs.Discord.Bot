@@ -67,16 +67,22 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                     return;
                 }
 
-                GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ResponseId = Context.Interaction.ApplicationId, ResponseToken = Context.Interaction.Token });
+                await RespondAsync(InteractionCallback.DeferredMessage());
+
+                IList<IMessageComponentProperties> messageBuilder = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"Loading Loot Data..."))];
+
+                RestMessage message = await FollowupAsync(new InteractionMessageProperties()
+                {
+                    Components = messageBuilder,
+                    Flags = MessageFlags.IsComponentsV2,
+                });
+
+                GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ChannelId = Context.Channel.Id, MessageId = message.Id });
 
                 EmbedProperties embedProperties = new EmbedProperties()
                .WithColor(new(0x1eaae1));
 
-                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
-                {
-                    Components = response.LatestLootComponents,
-                    Flags = MessageFlags.IsComponentsV2,
-                }));
+                await ModifyFollowupAsync(message.Id, message => message.Components = response.LatestLootComponents);
 
             }
             catch (BadRequestException ex)

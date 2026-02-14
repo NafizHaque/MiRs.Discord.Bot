@@ -79,11 +79,8 @@ namespace MiRs.Discord.Bot.API.Controllers
 
                 GetLatestTeamLootResponse response = await Mediator.Send(teamLootPerms);
 
-                EmbedProperties embedProperties = new EmbedProperties()
-               .WithColor(new(0x1eaae1));
-
-                RestMessage message = await _restclient.ModifyInteractionResponseAsync(teamLootPerms.ResponseId.Value,
-                    teamLootPerms.ResponseToken,
+                RestMessage message = await _restclient.ModifyMessageAsync(teamLootPerms.ChannelId.Value,
+                    teamLootPerms.MessageId.Value,
                      message => message.Components = response.LatestLootComponents
                     );
 
