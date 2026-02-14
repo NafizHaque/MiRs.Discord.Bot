@@ -1,5 +1,4 @@
-﻿using MiRs.Discord.Bot.Mediator.Model.Home;
-using MiRs.Discord.Bot.Mediator;
+﻿using MiRs.Discord.Bot.Mediator;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
 using NetCord.Rest;
@@ -24,7 +23,6 @@ namespace MiRs.Discord.Bot.Interactors.Admin
             _appSettings = appSettings.Value;
         }
 
-
         /// <summary>
         /// Handles the request to get teams in guiild.
         /// </summary>
@@ -34,7 +32,7 @@ namespace MiRs.Discord.Bot.Interactors.Admin
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
         protected override async Task<GetTeamsInGuildResponse> HandleRequest(GetTeamsInGuildRequest request, GetTeamsInGuildResponse result, CancellationToken cancellationToken)
         {
-            var guildTeams = (await _mirsAdminClient.GetGuildTeams(request.GuildId)).OrderBy(ge => ge.Id);
+            IOrderedEnumerable<GuildTeam> guildTeams = (await _mirsAdminClient.GetGuildTeams(request.GuildId)).OrderBy(ge => ge.Id);
 
             StringBuilder teamidsString = new StringBuilder();
             StringBuilder teamNamesString = new StringBuilder();
@@ -69,8 +67,6 @@ namespace MiRs.Discord.Bot.Interactors.Admin
             PresenceProperties presenceProperties = new PresenceProperties(UserStatusType.Online)
                 .AddActivities(new UserActivityProperties("Free Hosting!", UserActivityType.Watching))
                 .WithSince(DateTimeOffset.Now);
-                
-                
 
             result.GuildTeamsEmbedMessage = embedProperties;
 

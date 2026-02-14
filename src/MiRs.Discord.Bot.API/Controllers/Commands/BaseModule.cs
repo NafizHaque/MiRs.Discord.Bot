@@ -6,15 +6,10 @@ using MiRs.Discord.Bot.Domain.Configurations;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Flurl.Http;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
-using NetCord.Services;
 using Flurl;
 using NetCord.Gateway;
-using NetCord.Gateway.JsonModels;
-using NetCord.Services.ComponentInteractions;
 using System.Text;
 using MiRs.Discord.Bot.Domain.Mappers;
-using Microsoft.VisualBasic;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
@@ -31,7 +26,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// <summary>
         ///  gets the Appsetting object
         /// </summary>
-        protected AppSettings Appsettings {  get; }
+        protected AppSettings Appsettings { get; }
 
         /// <summary>
         /// Creates MediatR object
@@ -63,7 +58,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// <summary>
         /// Simple ping pong command
         /// </summary>
-        [SlashCommand("ping", "Ping!")]
+        [SlashCommand("ping", "App ping!")]
         public async Task Pong()
         {
 
@@ -80,13 +75,14 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             try
             {
                 IFlurlResponse response = await "https://localhost:7176/v1/"
-                   .AppendPathSegment($"AdminRH/ping")
+                   .AppendPathSegment($"gen/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();
                 sb.Append("MiRs Api....Online\n");
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 sb.Append("MiRs Api....Failed\n");
             }
@@ -104,7 +100,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
             GatewayClientConfiguration x = new GatewayClientConfiguration()
             {
-                Presence = new PresenceProperties(UserStatusType.Online)
+                Presence = new PresenceProperties(UserStatusType.DoNotDisturb)
             };
 
             await FollowupAsync(message);
@@ -120,7 +116,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 return true;
             }
 
-           if((await Context.Client.Rest.GetGuildUserAsync(Context.Guild.Id, Context.User.Id)).GetPermissions(Context.Guild).HasFlag(Permissions.Administrator))
+            if ((await Context.Client.Rest.GetGuildUserAsync(Context.Guild.Id, Context.User.Id)).GetPermissions(Context.Guild).HasFlag(Permissions.Administrator))
             {
                 return true;
             }

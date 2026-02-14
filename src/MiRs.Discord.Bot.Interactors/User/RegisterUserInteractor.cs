@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
-using MiRs.Discord.Bot.Mediator.Model.Admin;
 using MiRs.Discord.Bot.Mediator;
 using MiRs.Discord.Bot.Mediator.Model.Users;
 
@@ -22,7 +16,6 @@ namespace MiRs.Discord.Bot.Interactors.User
             _mirsUserClient = mirsUserClient;
             _appSettings = appSettings.Value;
         }
-
 
         /// <summary>
         /// Handles the request to get teams in guiild.

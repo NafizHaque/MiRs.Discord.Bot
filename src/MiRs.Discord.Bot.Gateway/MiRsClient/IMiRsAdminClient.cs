@@ -4,12 +4,10 @@ namespace MiRs.Discord.Bot.Gateway.MiRsClient
 {
     public interface IMiRsAdminClient
     {
-        Task<IEnumerable<GuildTeam>> GetGuildTeams(ulong guildId);
+        public Task<IEnumerable<GuildTeam>> GetGuildTeams(ulong guildId);
 
-        Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId);
+        public Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId);
 
-        Task CreateGuildTeam(ulong guildId, string teamname);
-
-        Task CreateGuildEvent(GuildEvent guildEvent);
+        public Task<GuildPermissions> GetGuildMessagePermissions(ulong guildId);
     }
 }
