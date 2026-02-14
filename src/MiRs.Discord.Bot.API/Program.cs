@@ -1,11 +1,4 @@
-using System.Net;
-using System.Reflection;
-using System.Runtime;
-using Asp.Versioning;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using MiRs.Discord.Bot.API.Controllers.Commands;
+using Microsoft.OpenApi;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Interactors;
@@ -15,6 +8,7 @@ using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
+using System.Reflection;
 
 namespace MiRs.Discord.Bot.API
 {
@@ -22,7 +16,7 @@ namespace MiRs.Discord.Bot.API
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
@@ -68,30 +62,40 @@ namespace MiRs.Discord.Bot.API
                                       | GatewayIntents.Guilds;
 
                     options.Presence = new PresenceProperties(UserStatusType.Online)
-                    .WithActivities(new List<UserActivityProperties> { new UserActivityProperties("7 teams!", UserActivityType.Competing)
+                    .WithActivities(new List<UserActivityProperties> { new UserActivityProperties("Twisted Billington is a lie", UserActivityType.Playing)
                         .WithCreatedAt(DateTimeOffset.Now)
                         .WithFlags(UserActivityFlags.Spectate)})
                     .WithSince(DateTimeOffset.UtcNow.AddHours(-3));
                 })
-                .AddGatewayEventHandlers(typeof(Program).Assembly)
+                .AddGatewayHandlers(typeof(Program).Assembly)
                 .AddApplicationCommands();
+
+
 
             builder.Services.Configure<AppSettings>(builder.Configuration);
 
-            var superAdmins = builder.Configuration.GetSection("DiscordSuperAdmins")
+            builder.Configuration.GetSection("DiscordSuperAdmins")
                                         .Get<List<ulong>>();
 
+            builder.Configuration.GetSection("RuneHunterMonsterImages")
+                            .Get<List<string>>();
+
+            builder.Services.AddScoped<IMiRsTokenService, MiRsTokenService>();
             builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
             builder.Services.AddScoped<IMiRsUserClient, MiRsUserClient>();
+            builder.Services.AddScoped<IMiRsGameClient, MiRsGameClient>();
 
             builder.Services.AddMediatRContracts();
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
+                app.UseSwagger(options =>
+                {
+                    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+                });
                 app.UseSwaggerUI();
             }
 
@@ -102,9 +106,7 @@ namespace MiRs.Discord.Bot.API
             app.MapControllers();
 
             // Add commands from modules
-            app .AddModules(typeof(Program).Assembly);
-
-            app.UseGatewayEventHandlers();
+            app.AddModules(typeof(Program).Assembly);
 
             await app.RunAsync();
         }

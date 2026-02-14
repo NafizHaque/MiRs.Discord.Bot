@@ -1,26 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.1" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
     <PackageReference Include="Flurl" Version="4.0.0" />
     <PackageReference Include="Flurl.Http" Version="4.0.2" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
-    <PackageReference Include="NetCord" Version="1.0.0-alpha.356" />
-    <PackageReference Include="NetCord.Hosting" Version="1.0.0-alpha.356" />
-    <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-alpha.356" />
-    <PackageReference Include="NetCord.Services" Version="1.0.0-alpha.356" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageReference Include="NetCord" Version="1.0.0-alpha.461" />
+    <PackageReference Include="NetCord.Hosting" Version="1.0.0-alpha.461" />
+    <PackageReference Include="NetCord.Hosting.Services" Version="1.0.0-alpha.461" />
+    <PackageReference Include="NetCord.Services" Version="1.0.0-alpha.461" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +30,6 @@
     <ProjectReference Include="..\MiRs.Discord.Bot.Interactors\MiRs.Discord.Bot.Interactors.csproj" />
     <ProjectReference Include="..\MiRs.Discord.Bot.Mediator\MiRs.Discord.Bot.Mediator.csproj" />
     <ProjectReference Include="..\MiRs.Discord.Bot.MiRsClient\MiRs.Discord.Bot.MiRsClient.csproj" />
-    <ProjectReference Include="..\MiRs.Discord.Bot.Utils\MiRs.Discord.Bot.Utils.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

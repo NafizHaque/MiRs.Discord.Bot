@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Mappers;
@@ -12,6 +6,7 @@ using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Mediator;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
 using NetCord.Rest;
+using System.Text;
 
 namespace MiRs.Discord.Bot.Interactors.Admin
 {
@@ -26,7 +21,6 @@ namespace MiRs.Discord.Bot.Interactors.Admin
             _appSettings = appSettings.Value;
         }
 
-
         /// <summary>
         /// Handles the request to get teams in guiild.
         /// </summary>
@@ -36,7 +30,7 @@ namespace MiRs.Discord.Bot.Interactors.Admin
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
         protected override async Task<GetEventsInGuildResponse> HandleRequest(GetEventsInGuildRequest request, GetEventsInGuildResponse result, CancellationToken cancellationToken)
         {
-            var guildEvents = (await _mirsAdminClient.GetGuildEvents(request.GuildId)).OrderBy(gt => gt.Id);
+            IOrderedEnumerable<GuildEvent> guildEvents = (await _mirsAdminClient.GetGuildEvents(request.GuildId)).OrderBy(gt => gt.Id);
 
             StringBuilder teamidsString = new StringBuilder();
             StringBuilder teamNamesString = new StringBuilder();

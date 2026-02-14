@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.Interactors", "MiRs.Discord.Bot.Interactors\MiRs.Discord.Bot.Interactors.csproj", "{EC0332C6-B163-46C9-9AC6-1A0B211A30BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.Interfaces", "MiRs.Discord.Bot.Interfaces\MiRs.Discord.Bot.Interfaces.csproj", "{3A84359F-B23E-4E01-8EE9-7E70650EAE63}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.Gateway", "MiRs.Discord.Bot.Gateway\MiRs.Discord.Bot.Gateway.csproj", "{FA85426C-BA69-4CB4-ADE9-6BD160F4F7CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infastructure", "Infastructure", "{1B805D6F-76EF-4943-9A90-75FD7B88501C}"
@@ -22,8 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.Mediator", "MiRs.Discord.Bot.Mediator\MiRs.Discord.Bot.Mediator.csproj", "{27F856E9-9127-42AD-964E-9E56B59DAC25}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.MiRsClient", "MiRs.Discord.Bot.MiRsClient\MiRs.Discord.Bot.MiRsClient.csproj", "{493BC9A9-CF6D-42FD-B0E0-42682E6F8CA0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRs.Discord.Bot.Utils", "MiRs.Discord.Bot.Utils\MiRs.Discord.Bot.Utils.csproj", "{BB876066-747F-4413-B98A-72244498C9AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +35,6 @@ Global
 		{EC0332C6-B163-46C9-9AC6-1A0B211A30BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC0332C6-B163-46C9-9AC6-1A0B211A30BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC0332C6-B163-46C9-9AC6-1A0B211A30BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A84359F-B23E-4E01-8EE9-7E70650EAE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A84359F-B23E-4E01-8EE9-7E70650EAE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A84359F-B23E-4E01-8EE9-7E70650EAE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A84359F-B23E-4E01-8EE9-7E70650EAE63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA85426C-BA69-4CB4-ADE9-6BD160F4F7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA85426C-BA69-4CB4-ADE9-6BD160F4F7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA85426C-BA69-4CB4-ADE9-6BD160F4F7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,10 +51,6 @@ Global
 		{493BC9A9-CF6D-42FD-B0E0-42682E6F8CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{493BC9A9-CF6D-42FD-B0E0-42682E6F8CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{493BC9A9-CF6D-42FD-B0E0-42682E6F8CA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB876066-747F-4413-B98A-72244498C9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB876066-747F-4413-B98A-72244498C9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB876066-747F-4413-B98A-72244498C9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB876066-747F-4413-B98A-72244498C9AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,12 +58,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D2195CF3-6A01-46CB-AC03-5DA8F1BECA7C} = {1FD72C32-F2FD-4E22-AC6B-74583F95BA29}
 		{EC0332C6-B163-46C9-9AC6-1A0B211A30BE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{3A84359F-B23E-4E01-8EE9-7E70650EAE63} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{FA85426C-BA69-4CB4-ADE9-6BD160F4F7CC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{DE9C4FA7-B288-4F70-A948-9A4D66E3A453} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{27F856E9-9127-42AD-964E-9E56B59DAC25} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{493BC9A9-CF6D-42FD-B0E0-42682E6F8CA0} = {1B805D6F-76EF-4943-9A90-75FD7B88501C}
-		{BB876066-747F-4413-B98A-72244498C9AC} = {1B805D6F-76EF-4943-9A90-75FD7B88501C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AD1B83E-053C-400C-9213-388264EE0504}
