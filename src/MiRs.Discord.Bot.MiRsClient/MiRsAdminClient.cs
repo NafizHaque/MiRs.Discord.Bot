@@ -22,7 +22,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            GuildTeamContainer response = await _appsettings.Value.ApiBaseUrl
+            GuildTeamContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("AdminRH/guilds")
@@ -39,7 +39,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            GuildEventContainer response = await _appsettings.Value.ApiBaseUrl
+            GuildEventContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("events")
@@ -56,7 +56,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            GuildPermissions response = await _appsettings.Value.ApiBaseUrl
+            GuildPermissions response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("Gen/guildperms")

@@ -21,7 +21,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            EventTeamProgressContainer response = await _appsettings.Value.ApiBaseUrl
+            EventTeamProgressContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("runehunter/progress")
@@ -39,7 +39,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            RHUserLootContainer response = await _appsettings.Value.ApiBaseUrl
+            RHUserLootContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("runehunter/loot")

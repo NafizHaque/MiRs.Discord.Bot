@@ -17,7 +17,7 @@ public class MiRsTokenService : IMiRsTokenService
     public async Task<string> GetTokenAsync(CancellationToken cancellationToken = default)
     {
         AccessToken token = await _credential.GetTokenAsync(
-            new TokenRequestContext(new[] { _appsettings.Value.ApiScope }),
+            new TokenRequestContext(new[] { _appsettings.Value.Scope }),
             cancellationToken);
 
         return token.Token;

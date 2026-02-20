@@ -22,7 +22,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            await _appsettings.Value.ApiBaseUrl
+            await _appsettings.Value.BaseUrl
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment($"user")
                 .PostJsonAsync(user);
