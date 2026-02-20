@@ -90,15 +90,11 @@ namespace MiRs.Discord.Bot.API
 
             WebApplication app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseSwagger(options =>
             {
-                app.UseSwagger(options =>
-                {
-                    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
-                });
-                app.UseSwaggerUI();
-            }
+                options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+            });
+            app.UseSwaggerUI();
 
             app.UseAuthorization();
 
