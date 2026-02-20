@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - app-mirs-discord-bot
+name: Deploy ASP.NET Core app to Azure Web App
 
 on:
   push:
@@ -9,11 +9,17 @@ on:
       - main
   workflow_dispatch:
 
+env:
+    AZURE_WEBAPP_NAME: app-mirs-discord-bot
+    AZURE_WEBAPP_PACKAGE_PATH: '.'
+    DOTNET_VERSION: '10.x'
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -21,45 +27,26 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }} 
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
+      - name: dotnet build and publish Discord Bot 
+        working-directory: ./src/MiRs.Discord.Bot.API
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o '../../${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A513900F80174B08AC6A17427DF666BF }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D2B17166686E42EC86ECED5BC431C223 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_697651EBF9DC4A5BB3CA8B5BEE9ACD26 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B429929711634C11ADF37C848F54B888 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E3098235D2864A42BB31F997D605D56D }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_746AFAC0E3494355B0A1B1406D2681B7 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'app-mirs-discord-bot'
-          slot-name: 'Production'
-          package: .
+          app-name:  ${{ env.AZURE_WEBAPP_NAME }}
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
           
