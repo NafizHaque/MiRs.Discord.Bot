@@ -70,8 +70,6 @@ namespace MiRs.Discord.Bot.API
                 .AddGatewayHandlers(typeof(Program).Assembly)
                 .AddApplicationCommands();
 
-
-
             builder.Services.Configure<AppSettings>(builder.Configuration);
 
             builder.Configuration.GetSection("DiscordSuperAdmins")
