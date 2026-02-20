@@ -78,6 +78,9 @@ namespace MiRs.Discord.Bot.API
             builder.Configuration.GetSection("RuneHunterMonsterImages")
                             .Get<List<string>>();
 
+            builder.Services.Configure<AppSettings>(
+                builder.Configuration.GetSection("MiRs"));
+
             builder.Services.AddScoped<IMiRsTokenService, MiRsTokenService>();
             builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
             builder.Services.AddScoped<IMiRsUserClient, MiRsUserClient>();
@@ -96,8 +99,6 @@ namespace MiRs.Discord.Bot.API
                 });
                 app.UseSwaggerUI();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

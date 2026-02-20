@@ -1,15 +1,15 @@
-﻿using MediatR;
-using NetCord.Services.ApplicationCommands;
-using NetCord.Rest;
-using NetCord;
-using MiRs.Discord.Bot.Domain.Configurations;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
+﻿using Flurl;
 using Flurl.Http;
-using Flurl;
-using NetCord.Gateway;
-using System.Text;
+using MediatR;
+using Microsoft.Extensions.Options;
+using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Mappers;
+using NetCord;
+using NetCord.Gateway;
+using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
+using System.Diagnostics;
+using System.Text;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
