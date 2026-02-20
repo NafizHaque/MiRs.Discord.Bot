@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Mappers;
@@ -7,6 +6,7 @@ using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Mediator;
 using MiRs.Discord.Bot.Mediator.Model.Admin;
 using NetCord.Rest;
+using System.Text;
 
 namespace MiRs.Discord.Bot.Interactors.Admin
 {

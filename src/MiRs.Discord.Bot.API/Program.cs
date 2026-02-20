@@ -1,4 +1,3 @@
-using System.Reflection;
 using Microsoft.OpenApi;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
@@ -9,6 +8,7 @@ using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
+using System.Reflection;
 
 namespace MiRs.Discord.Bot.API
 {
@@ -78,6 +78,7 @@ namespace MiRs.Discord.Bot.API
             builder.Configuration.GetSection("RuneHunterMonsterImages")
                             .Get<List<string>>();
 
+            builder.Services.AddScoped<IMiRsTokenService, MiRsTokenService>();
             builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
             builder.Services.AddScoped<IMiRsUserClient, MiRsUserClient>();
             builder.Services.AddScoped<IMiRsGameClient, MiRsGameClient>();
