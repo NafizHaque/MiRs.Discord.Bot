@@ -43,7 +43,7 @@ namespace MiRs.Discord.Bot.MiRsClient
             _logger.LogInformation("THIS IS THE TOKEN!!!! {token}", token);
             GuildEventContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
-                .WithOAuthBearerToken(token)
+                .WithHeader("Authorization", $"Bearer {token}")
                 .AppendPathSegment("events")
                 .SetQueryParams(new
                 {
