@@ -6,7 +6,7 @@ using MiRs.Discord.Bot.Gateway.MiRsClient;
 
 public class MiRsTokenService : IMiRsTokenService
 {
-    private readonly TokenCredential _credential = new DefaultAzureCredential();
+    private readonly TokenCredential _credential = new ManagedIdentityCredential();
     private readonly IOptions<AppSettings> _appsettings;
 
     public MiRsTokenService(IOptions<AppSettings> appsettings)

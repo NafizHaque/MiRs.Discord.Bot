@@ -81,7 +81,7 @@ namespace MiRs.Discord.Bot.API
             builder.Services.Configure<AppSettings>(
                 builder.Configuration.GetSection("MiRs"));
 
-            builder.Services.AddScoped<IMiRsTokenService, MiRsTokenService>();
+            builder.Services.AddTransient<IMiRsTokenService, MiRsTokenService>();
             builder.Services.AddScoped<IMiRsAdminClient, MiRsAdminClient>();
             builder.Services.AddScoped<IMiRsUserClient, MiRsUserClient>();
             builder.Services.AddScoped<IMiRsGameClient, MiRsGameClient>();
