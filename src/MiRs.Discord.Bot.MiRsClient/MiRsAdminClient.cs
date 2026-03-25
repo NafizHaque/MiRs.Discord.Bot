@@ -37,7 +37,7 @@ namespace MiRs.Discord.Bot.MiRsClient
 
         public async Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId)
         {
-            string token = await _miRsTokenService.okenAsync();
+            string token = await _miRsTokenService.GetTokenAsync();
 
             GuildEventContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")

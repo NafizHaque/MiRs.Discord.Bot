@@ -1,10 +1,11 @@
-﻿using Flurl;
+﻿using Azure.Core;
+using Azure.Identity;
+using Flurl;
 using Flurl.Http;
 using MediatR;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Mappers;
-using MiRs.Discord.Bot.Gateway.MiRsClient;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
@@ -29,16 +30,13 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// </summary>
         protected AppSettings Appsettings { get; }
 
-        private readonly IMiRsTokenService _miRsTokenService;
-
         /// <summary>
         /// Creates MediatR object
         /// </summary>
-        protected BaseModule(ISender mediator, IOptions<AppSettings> appSettings, IMiRsTokenService miRsTokenService)
+        protected BaseModule(ISender mediator, IOptions<AppSettings> appSettings)
         {
             Mediator = mediator;
             Appsettings = appSettings.Value;
-            _miRsTokenService = miRsTokenService;
         }
 
         /// <summary>
@@ -65,6 +63,11 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SlashCommand("ping", "App ping!")]
         public async Task Pong()
         {
+            TokenCredential _credential = new DefaultAzureCredential();
+
+            AccessToken token = await _credential.GetTokenAsync(
+                new TokenRequestContext(new[] { Appsettings.Scope }),
+                CancellationToken.None);
 
             Stopwatch stopwatch = new Stopwatch();
 
@@ -78,10 +81,8 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
             try
             {
-                string token = await _miRsTokenService.GetTokenAsync();
-
-                IFlurlResponse response = await "https://localhost:7176/v1/"
-                   .WithOAuthBearerToken(token)
+                IFlurlResponse response = await Appsettings.BaseUrl
+                    .WithOAuthBearerToken(token.Token)
                    .AppendPathSegment($"gen/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();
