@@ -1,5 +1,6 @@
 ﻿using Flurl;
 using Flurl.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Entities;
@@ -11,17 +12,18 @@ namespace MiRs.Discord.Bot.MiRsClient
     {
         private readonly IOptions<AppSettings> _appsettings;
         private readonly IMiRsTokenService _miRsTokenService;
+        ILogger<MiRsAdminClient> _logger;
 
-        public MiRsAdminClient(IOptions<AppSettings> appsettings, IMiRsTokenService miRsTokenService)
+        public MiRsAdminClient(IOptions<AppSettings> appsettings, IMiRsTokenService miRsTokenService, ILogger<MiRsAdminClient> logger)
         {
             _appsettings = appsettings;
             _miRsTokenService = miRsTokenService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<GuildTeam>> GetGuildTeams(ulong guildId)
         {
             string token = await _miRsTokenService.GetTokenAsync();
-
             GuildTeamContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
@@ -38,7 +40,7 @@ namespace MiRs.Discord.Bot.MiRsClient
         public async Task<IEnumerable<GuildEvent>> GetGuildEvents(ulong guildId)
         {
             string token = await _miRsTokenService.GetTokenAsync();
-
+            _logger.LogInformation("THIS IS THE TOKEN!!!! {token}", token);
             GuildEventContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
