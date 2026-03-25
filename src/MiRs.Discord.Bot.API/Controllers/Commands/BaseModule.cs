@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Mappers;
+using MiRs.Discord.Bot.Gateway.MiRsClient;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
@@ -28,13 +29,16 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// </summary>
         protected AppSettings Appsettings { get; }
 
+        private readonly IMiRsTokenService _miRsTokenService;
+
         /// <summary>
         /// Creates MediatR object
         /// </summary>
-        protected BaseModule(ISender mediator, IOptions<AppSettings> appSettings)
+        protected BaseModule(ISender mediator, IOptions<AppSettings> appSettings, IMiRsTokenService miRsTokenService)
         {
             Mediator = mediator;
             Appsettings = appSettings.Value;
+            _miRsTokenService = miRsTokenService;
         }
 
         /// <summary>
@@ -74,7 +78,10 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
             try
             {
+                string token = await _miRsTokenService.GetTokenAsync();
+
                 IFlurlResponse response = await "https://localhost:7176/v1/"
+                   .WithOAuthBearerToken(token)
                    .AppendPathSegment($"gen/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();
