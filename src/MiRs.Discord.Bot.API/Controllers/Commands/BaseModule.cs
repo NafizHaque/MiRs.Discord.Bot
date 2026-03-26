@@ -83,7 +83,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             {
                 IFlurlResponse response = await Appsettings.BaseUrl
                     .WithOAuthBearerToken(token.Token)
-                   .AppendPathSegment($"gen/ping")
+                   .AppendPathSegment($"Generics/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();
                 sb.Append("MiRs Api....Online\n");
