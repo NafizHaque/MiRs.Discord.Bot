@@ -40,7 +40,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             {
                 await RespondAsync(InteractionCallback.Message(new()
                 {
-                    Content = $"Exception raised: {ex.Message}"
+                    Content = $"Could not verify registration. please try again"
                 }));
             }
         }

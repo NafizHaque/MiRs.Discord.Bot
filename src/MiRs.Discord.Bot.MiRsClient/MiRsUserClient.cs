@@ -25,6 +25,7 @@ namespace MiRs.Discord.Bot.MiRsClient
             await _appsettings.Value.BaseUrl
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment($"user")
+                .WithTimeout(TimeSpan.FromSeconds(10))
                 .PostJsonAsync(user);
         }
     }
