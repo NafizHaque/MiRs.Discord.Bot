@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Flurl.Http;
+using MediatR;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
 using MiRs.Discord.Bot.Domain.Exceptions;
@@ -17,6 +18,8 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SlashCommand("combat", "returns the progress of all combat guilds")]
         public async Task GetCombatProgress()
         {
+            await RespondAsync(InteractionCallback.DeferredMessage());
+
             try
             {
                 GetCombatProgressResponse response = await Mediator.Send(new GetCombatProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
@@ -24,27 +27,34 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 EmbedProperties embedProperties = new EmbedProperties()
                .WithColor(new(0x1eaae1));
 
-                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
                     Components = response.EventProgressComponents,
                     Flags = MessageFlags.IsComponentsV2,
-                }));
+                });
 
             }
             catch (BadRequestException ex)
             {
 
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
                     Content = ex.CustomErrorMessage
-                }));
+                });
+            }
+            catch (FlurlHttpException ex)
+            {
+                await FollowupAsync(new InteractionMessageProperties()
+                {
+                    Content = (await ex.GetResponseStringAsync()).Trim('"')
+                });
             }
             catch (Exception ex)
             {
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = $"Exception raised: {ex.Message}"
-                }));
+                    Content = $"Exception"
+                });
             }
         }
 
@@ -54,6 +64,8 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SlashCommand("skilling", "return all the progress of skilling guilds")]
         public async Task GetSkillingProgress()
         {
+            await RespondAsync(InteractionCallback.DeferredMessage());
+
             try
             {
                 GetSkillingProgressResponse response = await Mediator.Send(new GetSkillingProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
@@ -61,27 +73,34 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 EmbedProperties embedProperties = new EmbedProperties()
                .WithColor(new(0x1eaae1));
 
-                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
                     Components = response.EventProgressComponents,
                     Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                }));
+                });
 
             }
             catch (BadRequestException ex)
             {
 
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
                     Content = ex.CustomErrorMessage
-                }));
+                });
+            }
+            catch (FlurlHttpException ex)
+            {
+                await FollowupAsync(new InteractionMessageProperties()
+                {
+                    Content = (await ex.GetResponseStringAsync()).Trim('"')
+                });
             }
             catch (Exception ex)
             {
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = $"Exception raised: {ex.Message}"
-                }));
+                    Content = $"Exception raised:"
+                });
             }
         }
 
@@ -128,6 +147,13 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
 
                 await ModifyFollowupAsync(message.Id, message => message.Components = exComponent);
 
+            }
+            catch (FlurlHttpException ex)
+            {
+                await FollowupAsync(new InteractionMessageProperties()
+                {
+                    Content = (await ex.GetResponseStringAsync()).Trim('"')
+                });
             }
             catch (Exception ex)
             {

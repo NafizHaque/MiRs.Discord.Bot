@@ -59,7 +59,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             try
             {
                 IFlurlResponse response = await Appsettings.BaseUrl
-                    .WithOAuthBearerToken(token.Token)
+                   .WithOAuthBearerToken(token.Token)
                    .AppendPathSegment($"Generics/ping")
                    .WithTimeout(TimeSpan.FromSeconds(10))
                    .PostAsync();

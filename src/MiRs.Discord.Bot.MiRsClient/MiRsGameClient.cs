@@ -25,6 +25,7 @@ namespace MiRs.Discord.Bot.MiRsClient
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("runehunter/progress")
+                .WithTimeout(TimeSpan.FromSeconds(10))
                 .SetQueryParams(new
                 {
                     userId = userId,
@@ -43,6 +44,7 @@ namespace MiRs.Discord.Bot.MiRsClient
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("runehunter/loot")
+                .WithTimeout(TimeSpan.FromSeconds(10))
                 .SetQueryParams(new
                 {
                     userId = userId,
