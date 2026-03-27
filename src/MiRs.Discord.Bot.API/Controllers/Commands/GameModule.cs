@@ -64,7 +64,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SlashCommand("skilling", "return all the progress of skilling guilds")]
         public async Task GetSkillingProgress()
         {
-            await RespondAsync(InteractionCallback.DeferredMessage());
+            await RespondAsync(InteractionCallback.DeferredMessage(flags: MessageFlags.Ephemeral));
 
             try
             {
