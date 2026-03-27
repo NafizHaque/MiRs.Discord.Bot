@@ -17,10 +17,10 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SlashCommand("register", "Register to RuneHunter!")]
         public async Task RegisterUser([SlashCommandParameter(Name = "rsn")] string runescapename)
         {
+            await RespondAsync(InteractionCallback.DeferredMessage());
+
             try
             {
-                await RespondAsync(InteractionCallback.DeferredMessage());
-
                 RegisterUserResponse response = await Mediator.Send(new RegisterUserRequest { UserId = Context.User.Id, Username = Context.User.Username, RunescapeUsername = runescapename });
 
                 await FollowupAsync(new InteractionMessageProperties()
@@ -31,17 +31,17 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             }
             catch (FlurlHttpException ex)
             {
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = (await ex.GetResponseStringAsync()).Trim('"')
-                }));
+                    Content = ex.Message
+                });
             }
             catch (Exception ex)
             {
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = $"Could not verify registration. please try again"
-                }));
+                    Content = $"Could not verify registration. please try again | {ex.Message}"
+                });
             }
         }
     }
