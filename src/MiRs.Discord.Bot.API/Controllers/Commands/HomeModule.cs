@@ -1,140 +1,94 @@
-﻿using MediatR;
+﻿using Azure.Core;
+using Azure.Identity;
+using Flurl.Http;
+using MediatR;
 using Microsoft.Extensions.Options;
 using MiRs.Discord.Bot.Domain.Configurations;
-using MiRs.Discord.Bot.Domain.Exceptions;
-using MiRs.Discord.Bot.Mediator.Model.Runehunter;
+using MiRs.Discord.Bot.Domain.Mappers;
 using NetCord;
+using NetCord.Gateway;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
+using System.Diagnostics;
+using System.Text;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
     public class HomeModule(ISender sender, IOptions<AppSettings> appSettings) : BaseModule(sender, appSettings)
     {
         /// <summary>
-        /// Get all current user events progress
+        /// Discord app command to see user Id
         /// </summary>
-        [SlashCommand("combat", "returns the progress of all combat guilds")]
-        public async Task GetCombatProgress()
+        [UserCommand("ID")]
+        public string Id(User user)
         {
-            try
-            {
-                GetCombatProgressResponse response = await Mediator.Send(new GetCombatProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
-
-                EmbedProperties embedProperties = new EmbedProperties()
-               .WithColor(new(0x1eaae1));
-
-                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
-                {
-                    Components = response.EventProgressComponents,
-                    Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                }));
-
-            }
-            catch (BadRequestException ex)
-            {
-
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = ex.CustomErrorMessage
-                }));
-            }
-            catch (Exception ex)
-            {
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = $"Exception raised: {ex.Message}"
-                }));
-            }
+            return user.Id.ToString();
         }
 
         /// <summary>
-        /// Get all current user events progress
+        /// Discord app command to see message create date
         /// </summary>
-        [SlashCommand("skilling", "return all the progress of skilling guilds")]
-        public async Task GetSkillingProgress()
+        [MessageCommand("Timestamp")]
+        public string Timestamp(RestMessage message)
         {
-            try
-            {
-                GetSkillingProgressResponse response = await Mediator.Send(new GetSkillingProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
-
-                EmbedProperties embedProperties = new EmbedProperties()
-               .WithColor(new(0x1eaae1));
-
-                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
-                {
-                    Components = response.EventProgressComponents,
-                    Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                }));
-
-            }
-            catch (BadRequestException ex)
-            {
-
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = ex.CustomErrorMessage
-                }));
-            }
-            catch (Exception ex)
-            {
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = $"Exception raised: {ex.Message}"
-                }));
-            }
+            return message.CreatedAt.ToString();
         }
 
         /// <summary>
-        /// Get latest Team Loot 
+        /// Simple ping pong command
         /// </summary>
-        [SlashCommand("drops", "Return the latest team drops")]
-        public async Task GetLatestTeamLoot()
+        [SlashCommand("ping", "App ping!")]
+        public async Task Pong()
         {
+            TokenCredential _credential = new DefaultAzureCredential();
 
-            if (!(await UserValidated()))
-            {
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = $"Lack Permissions!"
-                }));
+            AccessToken token = await _credential.GetTokenAsync(
+                new TokenRequestContext(new[] { Appsettings.Scope }),
+                CancellationToken.None);
 
-                return;
-            }
+            Stopwatch stopwatch = new Stopwatch();
 
-            InteractionCallbackResponse msg = await RespondAsync(InteractionCallback.DeferredMessage());
+            stopwatch.Start();
 
-            IList<IMessageComponentProperties> messageBuilder = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"Loading Loot Data..."))];
+            await RespondAsync(InteractionCallback.DeferredMessage());
 
-            RestMessage message = await FollowupAsync(new InteractionMessageProperties()
-            {
-                Components = messageBuilder,
-                Flags = MessageFlags.IsComponentsV2,
-            });
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("Doctor Mudkip....Online\n");
 
             try
             {
-                GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ChannelId = Context.Channel.Id, MessageId = message.Id });
-
-                EmbedProperties embedProperties = new EmbedProperties()
-               .WithColor(new(0x1eaae1));
-
-                await ModifyFollowupAsync(message.Id, message => message.Components = response.LatestLootComponents);
-
-            }
-            catch (BadRequestException ex)
-            {
-                IList<IMessageComponentProperties> exComponent = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"{ex.Message}"))];
-
-                await ModifyFollowupAsync(message.Id, message => message.Components = exComponent);
+                IFlurlResponse response = await Appsettings.BaseUrl
+                    .WithOAuthBearerToken(token.Token)
+                   .AppendPathSegment($"Generics/ping")
+                   .WithTimeout(TimeSpan.FromSeconds(10))
+                   .PostAsync();
+                sb.Append("MiRs Api....Online\n");
 
             }
             catch (Exception ex)
             {
-                IList<IMessageComponentProperties> exComponent = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"{ex.Message}"))];
 
-                await ModifyFollowupAsync(message.Id, message => message.Components = exComponent);
+                sb.Append("MiRs Api....Failed\n");
             }
+
+            sb.Append($"ConnectionTime: {stopwatch.Elapsed.Milliseconds}ms");
+
+            sb.Wrapper("```");
+
+            stopwatch.Stop();
+
+            InteractionMessageProperties message = new InteractionMessageProperties()
+            {
+                Content = sb.ToString(),
+            };
+
+            GatewayClientConfiguration x = new GatewayClientConfiguration()
+            {
+                Presence = new PresenceProperties(UserStatusType.DoNotDisturb)
+            };
+
+            await FollowupAsync(message);
         }
     }
 }
