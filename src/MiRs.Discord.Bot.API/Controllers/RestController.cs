@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using MiRs.API.Controllers;
+using MiRs.Discord.Bot.API.Dto;
 using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Exceptions;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
@@ -41,7 +42,7 @@ namespace MiRs.Discord.Bot.API.Controllers
         /// <remarks>This call return user.</remarks>
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [HttpPost]
-        public async Task<IActionResult> SendEventWinner(EventWinner eventWinner)
+        public async Task<IActionResult> SendEventWinner([FromBody] EventWinner eventWinner)
         {
             try
             {
@@ -71,16 +72,23 @@ namespace MiRs.Discord.Bot.API.Controllers
         /// <remarks>This call return user.</remarks>
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [HttpPost("lootupdate")]
-        public async Task<IActionResult> UpdateTeamLootInteraction(GetLatestTeamLootRequest teamLootPerms)
+        public async Task<IActionResult> UpdateTeamLootInteraction([FromBody] LootAlertDto teamLootPerms)
         {
 
             try
             {
 
-                GetLatestTeamLootResponse response = await Mediator.Send(teamLootPerms);
+                GetLatestTeamLootResponse response = await Mediator.Send(
+                    new GetLatestTeamLootRequest
+                    {
+                        ChannelId = teamLootPerms.ChannelId,
+                        GuildId = teamLootPerms.GuildId,
+                        MessageId = teamLootPerms.MessageId,
+                        UserId = teamLootPerms.UserId,
+                    });
 
-                RestMessage message = await _restclient.ModifyMessageAsync(teamLootPerms.ChannelId.Value,
-                    teamLootPerms.MessageId.Value,
+                RestMessage message = await _restclient.ModifyMessageAsync(teamLootPerms.ChannelId,
+                    teamLootPerms.MessageId,
                      message => message.Components = response.LatestLootComponents
                     );
 
