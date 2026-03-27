@@ -27,7 +27,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
                 await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
                 {
                     Components = response.EventProgressComponents,
-                    Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                    Flags = MessageFlags.IsComponentsV2,
                 }));
 
             }

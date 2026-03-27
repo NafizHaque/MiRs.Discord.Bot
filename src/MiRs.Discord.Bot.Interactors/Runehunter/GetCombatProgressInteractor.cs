@@ -32,7 +32,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
         {
             IEnumerable<EventTeamProgress> eventTeamProgress = (await _mirsGameClient.GetEventTeamProgress(request.UserId, request.GuildId)).ToList();
 
-            ComponentContainerProperties containerBuilder = new ComponentContainerProperties { AccentColor = new Color(0, 159, 225) }.AddComponents(new MediaGalleryProperties().AddItems(new MediaGalleryItemProperties(new ComponentMediaProperties("https://files.catbox.moe/36x0rq.png"))));
+            ComponentContainerProperties containerBuilder = new ComponentContainerProperties { AccentColor = new Color(0, 159, 225) }.AddComponents(new MediaGalleryProperties().AddItems(new MediaGalleryItemProperties(new ComponentMediaProperties("https://files.catbox.moe/m0tkim.png"))));
 
             containerBuilder.AddComponents(new TextDisplayProperties($"## {eventTeamProgress.FirstOrDefault().Team.TeamName} - {DateTime.UtcNow.ToString("hh:mm:ss tt")} UTC"));
 
@@ -51,7 +51,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
             {
 
                 // Temp to split the progress ui
-                if (!tempCategoryCheck.Contains(prog.Category.name))
+                if (tempCategoryCheck.Contains(prog.Category.name))
                 {
                     continue;
                 }

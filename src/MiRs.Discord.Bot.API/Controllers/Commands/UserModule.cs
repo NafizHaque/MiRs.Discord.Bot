@@ -19,13 +19,14 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         {
             try
             {
+                await RespondAsync(InteractionCallback.DeferredMessage());
 
                 RegisterUserResponse response = await Mediator.Send(new RegisterUserRequest { UserId = Context.User.Id, Username = Context.User.Username, RunescapeUsername = runescapename });
 
-                await RespondAsync(InteractionCallback.Message(new()
+                await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = "Success Create User!"
-                }));
+                    Content = "Successfully Created User!"
+                });
 
             }
             catch (FlurlHttpException ex)
