@@ -88,7 +88,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         /// <summary>
         /// Get latest Team Loot 
         /// </summary>
-        [SubSlashCommand("drops", "Return the latest team drops")]
+        [SlashCommand("drops", "Return the latest team drops")]
         public async Task GetLatestTeamLoot()
         {
 
