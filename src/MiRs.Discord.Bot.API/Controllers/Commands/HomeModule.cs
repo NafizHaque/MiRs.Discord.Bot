@@ -55,28 +55,29 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
         [SubSlashCommand("drops", "Return the latest team drops")]
         public async Task GetLatestTeamLoot()
         {
+
+            if (!(await UserValidated()))
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = $"Lack Permissions!"
+                }));
+
+                return;
+            }
+
+            InteractionCallbackResponse msg = await RespondAsync(InteractionCallback.DeferredMessage());
+
+            IList<IMessageComponentProperties> messageBuilder = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"Loading Loot Data..."))];
+
+            RestMessage message = await FollowupAsync(new InteractionMessageProperties()
+            {
+                Components = messageBuilder,
+                Flags = MessageFlags.IsComponentsV2,
+            });
+
             try
             {
-                if (!(await UserValidated()))
-                {
-                    await RespondAsync(InteractionCallback.Message(new()
-                    {
-                        Content = $"Lack Permissions!"
-                    }));
-
-                    return;
-                }
-
-                await RespondAsync(InteractionCallback.DeferredMessage());
-
-                IList<IMessageComponentProperties> messageBuilder = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"Loading Loot Data..."))];
-
-                RestMessage message = await FollowupAsync(new InteractionMessageProperties()
-                {
-                    Components = messageBuilder,
-                    Flags = MessageFlags.IsComponentsV2,
-                });
-
                 GetLatestTeamLootResponse response = await Mediator.Send(new GetLatestTeamLootRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id, ChannelId = Context.Channel.Id, MessageId = message.Id });
 
                 EmbedProperties embedProperties = new EmbedProperties()
@@ -87,18 +88,16 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             }
             catch (BadRequestException ex)
             {
+                IList<IMessageComponentProperties> exComponent = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"{ex.Message}"))];
 
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = ex.CustomErrorMessage
-                }));
+                await ModifyFollowupAsync(message.Id, message => message.Components = exComponent);
+
             }
             catch (Exception ex)
             {
-                await RespondAsync(InteractionCallback.Message(new()
-                {
-                    Content = $"Exception raised: {ex.Message}"
-                }));
+                IList<IMessageComponentProperties> exComponent = [new ComponentContainerProperties().AddComponents(new TextDisplayProperties($"{ex.Message}"))];
+
+                await ModifyFollowupAsync(message.Id, message => message.Components = exComponent);
             }
         }
     }
