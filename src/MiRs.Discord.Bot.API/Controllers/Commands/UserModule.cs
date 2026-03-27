@@ -33,7 +33,7 @@ namespace MiRs.Discord.Bot.API.Controllers.Commands
             {
                 await FollowupAsync(new InteractionMessageProperties()
                 {
-                    Content = ex.Message
+                    Content = (await ex.GetResponseStringAsync()).Trim('"')
                 });
             }
             catch (Exception ex)
