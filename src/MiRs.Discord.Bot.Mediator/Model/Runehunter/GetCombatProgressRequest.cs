@@ -2,7 +2,7 @@
 
 namespace MiRs.Discord.Bot.Mediator.Model.Runehunter
 {
-    public class GetEventsProgressRequest : IRequest<GetEventsProgressResponse>
+    public class GetCombatProgressRequest : IRequest<GetCombatProgressResponse>
     {
         public ulong UserId { get; set; }
 

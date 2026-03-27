@@ -9,18 +9,54 @@ using NetCord.Services.ApplicationCommands;
 
 namespace MiRs.Discord.Bot.API.Controllers.Commands
 {
-    [SlashCommand("hub", "Hub for your team!")]
     public class HomeModule(ISender sender, IOptions<AppSettings> appSettings) : BaseModule(sender, appSettings)
     {
         /// <summary>
         /// Get all current user events progress
         /// </summary>
-        [SubSlashCommand("progress", "Return the current user events progress")]
-        public async Task GetEventsProgress()
+        [SlashCommand("combat", "returns the progress of all combat guilds")]
+        public async Task GetCombatProgress()
         {
             try
             {
-                GetEventsProgressResponse response = await Mediator.Send(new GetEventsProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
+                GetCombatProgressResponse response = await Mediator.Send(new GetCombatProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
+
+                EmbedProperties embedProperties = new EmbedProperties()
+               .WithColor(new(0x1eaae1));
+
+                await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties()
+                {
+                    Components = response.EventProgressComponents,
+                    Flags = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                }));
+
+            }
+            catch (BadRequestException ex)
+            {
+
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = ex.CustomErrorMessage
+                }));
+            }
+            catch (Exception ex)
+            {
+                await RespondAsync(InteractionCallback.Message(new()
+                {
+                    Content = $"Exception raised: {ex.Message}"
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Get all current user events progress
+        /// </summary>
+        [SlashCommand("skilling", "return all the progress of skilling guilds")]
+        public async Task GetSkillingProgress()
+        {
+            try
+            {
+                GetSkillingProgressResponse response = await Mediator.Send(new GetSkillingProgressRequest { UserId = Context.User.Id, GuildId = Context.Guild.Id });
 
                 EmbedProperties embedProperties = new EmbedProperties()
                .WithColor(new(0x1eaae1));

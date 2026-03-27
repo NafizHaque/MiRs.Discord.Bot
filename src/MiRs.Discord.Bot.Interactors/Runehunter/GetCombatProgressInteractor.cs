@@ -10,12 +10,12 @@ using System.Text;
 
 namespace MiRs.Discord.Bot.Interactors.Runehunter
 {
-    public class GetEventsProgressInteractor : RequestHandler<GetEventsProgressRequest, GetEventsProgressResponse>
+    public class GetCombatProgressInteractor : RequestHandler<GetCombatProgressRequest, GetCombatProgressResponse>
     {
         private readonly IMiRsGameClient _mirsGameClient;
         private readonly AppSettings _appSettings;
 
-        public GetEventsProgressInteractor(IMiRsGameClient mirsGameClient, IOptions<AppSettings> appSettings)
+        public GetCombatProgressInteractor(IMiRsGameClient mirsGameClient, IOptions<AppSettings> appSettings)
         {
             _mirsGameClient = mirsGameClient;
             _appSettings = appSettings.Value;
@@ -28,11 +28,11 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
         /// <param name="result">User object that was created.</param>
         /// <param name="cancellationToken">The cancellation token for the request.</param>
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
-        protected override async Task<GetEventsProgressResponse> HandleRequest(GetEventsProgressRequest request, GetEventsProgressResponse result, CancellationToken cancellationToken)
+        protected override async Task<GetCombatProgressResponse> HandleRequest(GetCombatProgressRequest request, GetCombatProgressResponse result, CancellationToken cancellationToken)
         {
             IEnumerable<EventTeamProgress> eventTeamProgress = (await _mirsGameClient.GetEventTeamProgress(request.UserId, request.GuildId)).ToList();
 
-            ComponentContainerProperties containerBuilder = new ComponentContainerProperties { AccentColor = new Color(0, 159, 225) }.AddComponents(new MediaGalleryProperties().AddItems(new MediaGalleryItemProperties(new ComponentMediaProperties("https://files.catbox.moe/m0tkim.png"))));
+            ComponentContainerProperties containerBuilder = new ComponentContainerProperties { AccentColor = new Color(0, 159, 225) }.AddComponents(new MediaGalleryProperties().AddItems(new MediaGalleryItemProperties(new ComponentMediaProperties("https://files.catbox.moe/36x0rq.png"))));
 
             containerBuilder.AddComponents(new TextDisplayProperties($"## {eventTeamProgress.FirstOrDefault().Team.TeamName} - {DateTime.UtcNow.ToString("hh:mm:ss tt")} UTC"));
 
@@ -44,8 +44,17 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
 
             int imageIndexer = 0;
 
+            IEnumerable<string> tempCategoryCheck = new List<string>
+            {"Crafting Guild", "Farming Guild", "Herbalist Guild", "Mining Guild", "Runecraft Guild", "Woodcutting Guild" };
+
             foreach (TeamCategoryProgress prog in eventTeamProgress.FirstOrDefault().CategoryProgresses)
             {
+
+                // Temp to split the progress ui
+                if (!tempCategoryCheck.Contains(prog.Category.name))
+                {
+                    continue;
+                }
 
                 StringBuilder content = new StringBuilder();
 
