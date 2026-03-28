@@ -51,6 +51,9 @@ namespace MiRs.Discord.Bot.API
                     options.SubstituteApiVersionInUrl = true;
                 });
 
+            builder.Services.AddApplicationInsightsTelemetry();
+
+
             builder.Services
                 .AddDiscordGateway(options =>
                 {
