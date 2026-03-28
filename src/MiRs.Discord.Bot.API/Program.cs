@@ -53,7 +53,6 @@ namespace MiRs.Discord.Bot.API
 
             builder.Services.AddApplicationInsightsTelemetry();
 
-
             builder.Services
                 .AddDiscordGateway(options =>
                 {
