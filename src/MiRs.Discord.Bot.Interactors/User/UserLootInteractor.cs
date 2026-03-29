@@ -11,7 +11,7 @@ using System.Text;
 
 namespace MiRs.Discord.Bot.Interactors.User
 {
-    public class UserLootInteractor : RequestHandler<RegisterUserRequest, RegisterUserResponse>
+    public class UserLootInteractor : RequestHandler<UserLootRequest, UserLootResponse>
     {
         private readonly IMiRsUserClient _mirsUserClient;
         private readonly AppSettings _appSettings;
@@ -28,7 +28,7 @@ namespace MiRs.Discord.Bot.Interactors.User
         /// <param name="result">User object that was created.</param>
         /// <param name="cancellationToken">The cancellation token for the request.</param>
         /// <returns>Returns the user object that is created, if user is not created returns null.</returns>
-        protected override async Task<RegisterUserResponse> HandleRequest(RegisterUserRequest request, RegisterUserResponse result, CancellationToken cancellationToken)
+        protected override async Task<UserLootResponse> HandleRequest(UserLootRequest request, UserLootResponse result, CancellationToken cancellationToken)
         {
             RHUserLootContainer userLoot = (await _mirsUserClient.GetLatestUserLoot(request.UserId));
 
@@ -52,14 +52,7 @@ namespace MiRs.Discord.Bot.Interactors.User
                 string lootName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(loot.Loot.ToLower());
                 string quantity = loot.Quantity == 1 ? " " : $" ({loot.Quantity}) ";
 
-                content.Append($"[{loot.DateLogged.ToString("HH:mm")}] {username} got{quantity}{lootName}\n");
-
-                string secondLine = $"from {loot.Mobname.ToLower()}";
-
-                content.Append($"{secondLine}\n");
-
-                content.Append($"\n");
-
+                content.Append($"[{loot.DateLogged.ToString("HH:mm")}] {username} got{quantity}{lootName} from {loot.Mobname.ToLower()}\n");
             }
 
             content.Append("```");
