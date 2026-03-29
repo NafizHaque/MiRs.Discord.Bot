@@ -35,7 +35,7 @@ namespace MiRs.Discord.Bot.MiRsClient
 
             RHUserLootContainer response = await _appsettings.Value.BaseUrl
                 .WithOAuthBearerToken(token)
-                .AppendPathSegment($"user")
+                .AppendPathSegment($"user/loot")
                 .WithTimeout(TimeSpan.FromSeconds(10))
                 .SetQueryParams(new
                 {
