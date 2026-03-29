@@ -36,11 +36,11 @@ namespace MiRs.Discord.Bot.MiRsClient
             return response.EventTeamProgresses;
         }
 
-        public async Task<RHUserLootContainer> GetLatestTeamLoot(ulong userId, ulong guildId, ulong? channelId, ulong? messageId)
+        public async Task<RHTeamLootContainer> GetLatestTeamLoot(ulong userId, ulong guildId, ulong? channelId, ulong? messageId)
         {
             string token = await _miRsTokenService.GetTokenAsync();
 
-            RHUserLootContainer response = await _appsettings.Value.BaseUrl
+            RHTeamLootContainer response = await _appsettings.Value.BaseUrl
                 .WithHeader("Content-Type", "application/json")
                 .WithOAuthBearerToken(token)
                 .AppendPathSegment("runehunter/loot")
@@ -53,7 +53,7 @@ namespace MiRs.Discord.Bot.MiRsClient
                     messageId = messageId
 
                 })
-                .GetJsonAsync<RHUserLootContainer>();
+                .GetJsonAsync<RHTeamLootContainer>();
 
             return response;
         }

@@ -28,5 +28,22 @@ namespace MiRs.Discord.Bot.MiRsClient
                 .WithTimeout(TimeSpan.FromSeconds(10))
                 .PostJsonAsync(user);
         }
+
+        public async Task<RHUserLootContainer> GetLatestUserLoot(ulong userId)
+        {
+            string token = await _miRsTokenService.GetTokenAsync();
+
+            RHUserLootContainer response = await _appsettings.Value.BaseUrl
+                .WithOAuthBearerToken(token)
+                .AppendPathSegment($"user")
+                .WithTimeout(TimeSpan.FromSeconds(10))
+                .SetQueryParams(new
+                {
+                    userId = userId,
+                })
+                .GetJsonAsync<RHUserLootContainer>();
+
+            return response;
+        }
     }
 }

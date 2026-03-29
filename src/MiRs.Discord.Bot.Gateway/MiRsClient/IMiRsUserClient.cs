@@ -4,6 +4,9 @@ namespace MiRs.Discord.Bot.Gateway.MiRsClient
 {
     public interface IMiRsUserClient
     {
-        Task RegisterUser(RHUser user);
+        public Task RegisterUser(RHUser user);
+
+        public Task<RHUserLootContainer> GetLatestUserLoot(ulong userId);
+
     }
 }
