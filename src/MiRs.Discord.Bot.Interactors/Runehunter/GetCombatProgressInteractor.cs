@@ -114,7 +114,11 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                             limitReached = true;
                         }
 
-                        content.Append($"```+{tempArmouryCheck[indexer]}\n```\n");
+                        if (limitReached)
+                        {
+                            content.Append($"```+ {tempArmouryCheck[indexer]}\n```\n");
+                        }
+
 
                         indexer++;
                     }
