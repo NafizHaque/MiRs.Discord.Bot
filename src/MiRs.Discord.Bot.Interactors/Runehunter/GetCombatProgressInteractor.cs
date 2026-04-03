@@ -47,6 +47,9 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
             IEnumerable<string> tempCategoryCheck = new List<string>
             {"Crafting Guild", "Farming Guild", "Herbalist Guild", "Mining Guild", "Runecraft Guild", "Woodcutting Guild" };
 
+            IList<string> tempArmouryCheck = new List<string>
+            {"Lunar Chest Unlocked", "Fortis Colosseum Unlocked", "Tombs of Amascut Unlocked", "Chambers of Xeric Unlocked", "Theatre of Blood Unlocked" };
+
             foreach (TeamCategoryProgress prog in eventTeamProgress.FirstOrDefault().CategoryProgresses)
             {
 
@@ -88,24 +91,40 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
 
                 if (string.Equals(prog.Category.name, "hub base", StringComparison.OrdinalIgnoreCase))
                 {
-                    content.Append($"```diff\nUnlocked:\n+ Hub Base level {currentLevel.Level.Levelnumber} out of 9!\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ Hub Base level {currentLevel.Level.Levelnumber - 1} out of 9!\n```\n");
                 }
                 else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 1)
                 {
-                    content.Append($"```diff\nUnlocked:\n+ Enemies under combat level 200 Unlocked!\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ Enemies under combat level 200 Unlocked!\n```\n");
                 }
                 else if (currentLevel.Level.Levelnumber == 1)
                 {
                     content.Append($"```diff\nNothing Unlocked Yet!```\n");
                 }
+                else if (string.Equals(prog.Category.name, "Armoury", StringComparison.OrdinalIgnoreCase))
+                {
+                    bool limitReached = false;
+                    int indexer = 0;
+                    while (limitReached == false)
+                    {
+                        content.Append($"```diff\nwhat you have currently unlocked:\n+ {tempArmouryCheck[indexer]}\n```\n");
+
+                        if (string.Equals(currentLevel.Level.UnlockDescription, tempArmouryCheck[indexer], StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            limitReached = true;
+                        }
+
+                        indexer++;
+                    }
+                }
                 else if (currentLevel.Level.Levelnumber == 9 && currentLevel.IsActive)
                 {
-                    content.Append($"```diff\nUnlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
                 }
                 else
                 {
                     string previousUnlock = Levels.Where(l => l.Level.Levelnumber == (currentLevel.Level.Levelnumber - 1)).Select(l => l.Level.UnlockDescription).FirstOrDefault();
-                    content.Append($"```diff\nUnlocked:\n+{previousUnlock}\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+{previousUnlock}\n```\n");
 
                 }
 

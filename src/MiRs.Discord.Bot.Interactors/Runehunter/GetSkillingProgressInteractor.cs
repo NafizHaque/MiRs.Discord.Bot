@@ -85,22 +85,18 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                     content.Append($"► {task.LevelTask.Name} **{task.Progress} / {task.LevelTask.Goal}**\n");
                 }
 
-                if (string.Equals(prog.Category.name, "hub base", StringComparison.OrdinalIgnoreCase))
-                {
-                    content.Append($"```diff\nUnlocked:\n+ Hub Base level {currentLevel.Level.Levelnumber} out of 9!\n```\n");
-                }
-                else if (currentLevel.Level.Levelnumber == 1)
+                if (currentLevel.Level.Levelnumber == 1)
                 {
                     content.Append($"```diff\nNothing Unlocked Yet!```\n");
                 }
                 else if (currentLevel.Level.Levelnumber == 9 && currentLevel.IsActive)
                 {
-                    content.Append($"```diff\nUnlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
                 }
                 else
                 {
                     string previousUnlock = Levels.Where(l => l.Level.Levelnumber == (currentLevel.Level.Levelnumber - 1)).Select(l => l.Level.UnlockDescription).FirstOrDefault();
-                    content.Append($"```diff\nUnlocked:\n+{previousUnlock}\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+{previousUnlock}\n```\n");
 
                 }
 
