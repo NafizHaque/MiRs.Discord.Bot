@@ -105,17 +105,20 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                 {
                     bool limitReached = false;
                     int indexer = 0;
+                    content.Append($"```diff\nwhat you have currently unlocked:\n```\n");
                     while (limitReached == false)
                     {
-                        content.Append($"```diff\nwhat you have currently unlocked:\n+ {tempArmouryCheck[indexer]}\n```\n");
 
                         if (string.Equals(currentLevel.Level.UnlockDescription, tempArmouryCheck[indexer], StringComparison.CurrentCultureIgnoreCase))
                         {
                             limitReached = true;
                         }
 
+                        content.Append($"```+{tempArmouryCheck[indexer]}\n```\n");
+
                         indexer++;
                     }
+                    content.Append($"```\n");
                 }
                 else if (currentLevel.Level.Levelnumber == 9 && currentLevel.IsActive)
                 {
