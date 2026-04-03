@@ -116,7 +116,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
 
                         if (limitReached)
                         {
-                            content.Append($"+ {tempArmouryCheck[indexer]}\n```\n");
+                            content.Append($"+ {tempArmouryCheck[indexer]}\n");
                         }
 
                         indexer++;
