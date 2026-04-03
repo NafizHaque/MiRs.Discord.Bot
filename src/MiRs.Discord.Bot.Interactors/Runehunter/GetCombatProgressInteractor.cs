@@ -90,7 +90,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                 {
                     content.Append($"```diff\nUnlocked:\n+ Hub Base level {currentLevel.Level.Levelnumber} out of 9!\n```\n");
                 }
-                else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 1)
                 {
                     content.Append($"```diff\nUnlocked:\n+ Enemies under combat level 200 Unlocked!\n```\n");
                 }
