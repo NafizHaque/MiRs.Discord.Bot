@@ -105,7 +105,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                 {
                     bool limitReached = false;
                     int indexer = 0;
-                    content.Append($"```diff\nwhat you have currently unlocked:\n```\n");
+                    content.Append($"```diff\nwhat you have currently unlocked:\n");
                     while (limitReached == false)
                     {
 
@@ -114,7 +114,7 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                             limitReached = true;
                         }
 
-                        if (limitReached)
+                        if (limitReached == false)
                         {
                             content.Append($"+ {tempArmouryCheck[indexer]}\n");
                         }
