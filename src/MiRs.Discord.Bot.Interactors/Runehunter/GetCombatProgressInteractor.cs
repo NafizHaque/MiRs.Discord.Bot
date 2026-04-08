@@ -89,13 +89,22 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                     content.Append($"► {task.LevelTask.Name} **{task.Progress} / {task.LevelTask.Goal}**\n");
                 }
 
-                if (string.Equals(prog.Category.name, "hub base", StringComparison.OrdinalIgnoreCase))
+                //please fix this. oh my god!
+                if (currentLevel.Level.Levelnumber == 9 && currentLevel.IsActive)
+                {
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
+                }
+                else if (string.Equals(prog.Category.name, "hub base", StringComparison.OrdinalIgnoreCase))
                 {
                     content.Append($"```diff\nwhat you have currently unlocked:\n+ Hub Base level {currentLevel.Level.Levelnumber - 1} out of 9!\n```\n");
                 }
                 else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 1)
                 {
                     content.Append($"```diff\nwhat you have currently unlocked:\n+ Enemies under combat level 200 Unlocked!\n```\n");
+                }
+                else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 5)
+                {
+                    content.Append($"```diff\nwhat you have currently unlocked:\n+ Enemies under combat level 9999 Unlocked!\n```\n");
                 }
                 else if (currentLevel.Level.Levelnumber == 1)
                 {
@@ -122,10 +131,6 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                         indexer++;
                     }
                     content.Append($"```\n");
-                }
-                else if (currentLevel.Level.Levelnumber == 9 && currentLevel.IsActive)
-                {
-                    content.Append($"```diff\nwhat you have currently unlocked:\n+ {currentLevel.Level.UnlockDescription}\n```\n");
                 }
                 else
                 {
