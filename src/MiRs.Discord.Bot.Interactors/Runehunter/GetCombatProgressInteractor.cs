@@ -102,13 +102,24 @@ namespace MiRs.Discord.Bot.Interactors.Runehunter
                 {
                     content.Append($"```diff\nwhat you have currently unlocked:\n+ Enemies under combat level 200 Unlocked!\n```\n");
                 }
-                else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 5)
+                else if (string.Equals(prog.Category.name, "Training Area", StringComparison.OrdinalIgnoreCase) && currentLevel.Level.Levelnumber == 5 && currentLevel.IsComplete == true)
                 {
                     content.Append($"```diff\nwhat you have currently unlocked:\n+ Enemies under combat level 9999 Unlocked!\n```\n");
                 }
                 else if (currentLevel.Level.Levelnumber == 1)
                 {
                     content.Append($"```diff\nNothing Unlocked Yet!```\n");
+                }
+                else if (string.Equals(prog.Category.name, "Armoury", StringComparison.OrdinalIgnoreCase) && prog.IsComplete)
+                {
+
+                    content.Append($"```diff\nwhat you have currently unlocked:\n");
+                    foreach (string t in tempArmouryCheck)
+                    {
+                        content.Append($"+ {t}\n");
+
+                    }
+                    content.Append($"```\n");
                 }
                 else if (string.Equals(prog.Category.name, "Armoury", StringComparison.OrdinalIgnoreCase))
                 {
