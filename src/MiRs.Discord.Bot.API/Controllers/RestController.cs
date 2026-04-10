@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MiRs.API.Controllers;
 using MiRs.Discord.Bot.API.Dto;
-using MiRs.Discord.Bot.Domain.Entities;
 using MiRs.Discord.Bot.Domain.Exceptions;
 using MiRs.Discord.Bot.Gateway.MiRsClient;
 using MiRs.Discord.Bot.Mediator.Model.Runehunter;
@@ -42,16 +41,16 @@ namespace MiRs.Discord.Bot.API.Controllers
         /// <remarks>This call return user.</remarks>
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [HttpPost]
-        public async Task<IActionResult> SendEventWinner([FromBody] EventWinner eventWinner)
+        public async Task<IActionResult> SendEventWinner(ulong channelId, string winningTeamName)
         {
             try
             {
                 MessageProperties messageProp = new MessageProperties
                 {
-                    Content = $"The Winner is... Team {eventWinner.Team.TeamName}"
+                    Content = $"The Winner is... Team {winningTeamName}"
                 };
 
-                RestMessage message = await _restclient.SendMessageAsync(eventWinner.Perms.ChannelId, messageProp);
+                RestMessage message = await _restclient.SendMessageAsync(channelId, messageProp);
                 return Ok();
 
             }
